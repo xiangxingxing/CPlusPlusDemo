@@ -7,9 +7,12 @@
 #include "company/manager.h"
 #include "company/worker.h"
 #include "company/boss.h"
+#include "stlib/std_manager.h"
 
 #include <iostream>
 #include <fstream>
+#include "vector"
+#include "map"
 
 using namespace std;
 
@@ -24,6 +27,13 @@ static void FileBinaryDemo();
 
 [[noreturn]] static void CompanyDemo();
 static void CompanyTest();
+
+static void VectorDemo();
+static void VectorDemo2();
+static void StringDemo1();
+static void MapDemo();
+
+void Print_Map(const map<int, int>& map1);
 
 int main() {
     //out_put::BasicUserInputDemo();
@@ -41,11 +51,19 @@ int main() {
     //FileTextDemo();
     //FileBinaryDemo();
 
-    CompanyDemo();
+    //CompanyDemo();
     //CompanyTest();
 
     //system("ls");
 
+    //VectorDemo();
+    //VectorDemo2();
+    //StringDemo1();
+
+    //StdManager::PlayerDemo();
+    //StdManager::SetSortDemo();
+
+    MapDemo();
     return 0;
 }
 
@@ -228,4 +246,69 @@ void CompanyTest(){
 
     worker = new Boss(3, "王五", 3);
     worker->ShowInfo();
+}
+
+void VectorDemo(){
+    StdManager::VectorDemo();
+}
+
+
+void VectorDemo2() {
+    vector<Student*> v;
+    Student stu1("a", 18, 90);
+    Student stu2("b", 19, 89);
+    Student stu3("c", 20, 88);
+    Student stu4("d", 21, 92);
+    v.push_back(&stu1);
+    v.push_back(&stu2);
+    v.push_back(&stu3);
+    v.push_back(&stu4);
+
+/*    for (auto it = v.begin(); it != v.end() ; it++) {
+        (*it)->show();
+    }*/
+
+    for (auto & elem : v) {
+        elem->show();
+    }
+
+    //拷贝构造
+    vector<Student*> v2(v);
+    for(Student* & elem : v2){
+        elem->show();
+    }
+}
+
+void StringDemo1(){
+    //StdManager::StringConstructDemo();
+    StdManager::VectorFuncDemo();
+}
+
+void MapDemo(){
+    map<int, int> m;
+    //插入方式
+    //第一种
+    m.insert(pair<int, int>(1, 10));
+    //第二种
+    m.insert(make_pair(2, 20));
+    //第三种
+    m.insert(map<int, int>::value_type(3, 30));
+    Print_Map(m);
+
+    //删除
+    m.erase(m.begin());
+    Print_Map(m);
+
+    auto pos = m.find(2); // 返回的迭代器
+    if(pos != m.end()){
+        cout << "查到了元素 key = " << pos->first << endl;
+    }else{
+        cout << "未找到元素" << endl;
+    }
+}
+
+void Print_Map(const map<int, int>& m){
+    for(auto & it : m){
+        cout << "key = " << it.first <<", val = " << it.second << endl;
+    }
 }
