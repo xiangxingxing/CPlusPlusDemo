@@ -13,6 +13,7 @@
 #include <fstream>
 #include "vector"
 #include "map"
+#include "json/json.h"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ static void VectorDemo();
 static void VectorDemo2();
 static void StringDemo1();
 static void MapDemo();
+static int JsonDemo();
 
 void Print_Map(const map<int, int>& map1);
 
@@ -63,7 +65,8 @@ int main() {
     //StdManager::PlayerDemo();
     //StdManager::SetSortDemo();
 
-    MapDemo();
+    //MapDemo();
+    return JsonDemo();
     return 0;
 }
 
@@ -311,4 +314,21 @@ void Print_Map(const map<int, int>& m){
     for(auto & it : m){
         cout << "key = " << it.first <<", val = " << it.second << endl;
     }
+}
+
+static int JsonDemo(){
+    Json::Value root;
+    std::ifstream ifs;
+    ifs.open("/Users/dev/shared/file/demo.json");
+
+    Json::CharReaderBuilder builder;
+    builder["collectComments"] = false;
+    JSONCPP_STRING errs;
+    if(!Json::parseFromStream(builder, ifs, &root, &errs)){
+        std::cout << errs << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    std::cout << root << std::endl;
+    return EXIT_SUCCESS;
 }
