@@ -18,16 +18,3 @@ struct TreeNode {
 };
 
 #endif //UNTITLED_TREE_NODE_H
-
-
-class TreeManager{
-public:
-    vector<int> preorderTraversal(TreeNode* root);
-    vector<int> inorderTraversal(TreeNode* root);
-    vector<int> postorderTraversal(TreeNode* root);
-
-    vector<vector<int>> levelOrder(TreeNode* root);
-
-    TreeNode* deleteNodeInBst(TreeNode* root, int key);
-    TreeNode* getMin(TreeNode* root);
-};
