@@ -2,8 +2,8 @@
 // Created by DEV on 2021/10/29.
 //
 
-#ifndef UNTITLED_EMPLOYEE_H
-#define UNTITLED_EMPLOYEE_H
+#ifndef CPPRACTICE_EMPLOYEE_H
+#define CPPRACTICE_EMPLOYEE_H
 
 #include "worker.h"
 
@@ -16,4 +16,4 @@ public:
 };
 
 
-#endif //UNTITLED_EMPLOYEE_H
+#endif //CPPRACTICE_EMPLOYEE_H

@@ -2,8 +2,8 @@
 // Created by DEV on 2021/10/29.
 //
 
-#ifndef UNTITLED_MANAGER_H
-#define UNTITLED_MANAGER_H
+#ifndef CPPRACTICE_MANAGER_H
+#define CPPRACTICE_MANAGER_H
 
 #include "worker.h"
 
@@ -15,4 +15,4 @@ public:
     virtual string GetDeptName();
 };
 
-#endif //UNTITLED_MANAGER_H
+#endif //CPPRACTICE_MANAGER_H

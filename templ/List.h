@@ -2,8 +2,8 @@
 // Created by DEV on 2021/10/28.
 //
 
-#ifndef UNTITLED_LIST_H
-#define UNTITLED_LIST_H
+#ifndef CPPRACTICE_LIST_H
+#define CPPRACTICE_LIST_H
 
 #include <iostream>
 
@@ -94,4 +94,4 @@ void List<T>::push_bask(const T &v) {
     ptr[size_++] = v;
 }
 
-#endif //UNTITLED_LIST_H
+#endif //CPPRACTICE_LIST_H

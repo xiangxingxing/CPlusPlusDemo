@@ -2,8 +2,8 @@
 // Created by DEV on 2021/11/1.
 //
 
-#ifndef UNTITLED_PLAYER_H
-#define UNTITLED_PLAYER_H
+#ifndef CPPRACTICE_PLAYER_H
+#define CPPRACTICE_PLAYER_H
 
 #include <string>
 using namespace std;
@@ -28,4 +28,4 @@ public:
     }
 };
 
-#endif //UNTITLED_PLAYER_H
+#endif //CPPRACTICE_PLAYER_H

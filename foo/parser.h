@@ -2,8 +2,8 @@
 // Created by DEV on 2021/11/4.
 //
 
-#ifndef UNTITLED_PARSER_H
-#define UNTITLED_PARSER_H
+#ifndef CPPRACTICE_PARSER_H
+#define CPPRACTICE_PARSER_H
 
 #include <iostream>
 #include <string>
@@ -27,4 +27,4 @@ private:
     Json::Value root_;
 };
 
-#endif //UNTITLED_PARSER_H
+#endif //CPPRACTICE_PARSER_H

@@ -2,8 +2,8 @@
 // Created by DEV on 2021/10/29.
 //
 
-#ifndef UNTITLED_WORKER_MANAGER_H
-#define UNTITLED_WORKER_MANAGER_H
+#ifndef CPPRACTICE_WORKER_MANAGER_H
+#define CPPRACTICE_WORKER_MANAGER_H
 
 #include <iostream>
 #include "worker.h"
@@ -41,4 +41,4 @@ public:
 
 };
 
-#endif //UNTITLED_WORKER_MANAGER_H
+#endif //CPPRACTICE_WORKER_MANAGER_H

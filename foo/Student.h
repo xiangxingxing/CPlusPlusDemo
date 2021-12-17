@@ -2,8 +2,8 @@
 // Created by DEV on 2021/10/27.
 //
 
-#ifndef UNTITLED_STUDENT_H
-#define UNTITLED_STUDENT_H
+#ifndef CPPRACTICE_STUDENT_H
+#define CPPRACTICE_STUDENT_H
 
 #include "iostream"
 using namespace std;
@@ -33,4 +33,4 @@ private:
     float m_score_;
 };
 
-#endif //UNTITLED_STUDENT_H
+#endif //CPPRACTICE_STUDENT_H

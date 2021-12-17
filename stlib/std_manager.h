@@ -2,8 +2,8 @@
 // Created by DEV on 2021/11/1.
 //
 
-#ifndef UNTITLED_STD_MANAGER_H
-#define UNTITLED_STD_MANAGER_H
+#ifndef CPPRACTICE_STD_MANAGER_H
+#define CPPRACTICE_STD_MANAGER_H
 
 #include "example/player.h"
 #include "vector"
@@ -23,4 +23,4 @@ public:
     static void ShowScore(vector<Player> &v);
 };
 
-#endif //UNTITLED_STD_MANAGER_H
+#endif //CPPRACTICE_STD_MANAGER_H

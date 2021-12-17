@@ -2,8 +2,8 @@
 // Created by DEV on 2021/10/27.
 //
 
-#ifndef UNTITLED_OUT_PUT_H
-#define UNTITLED_OUT_PUT_H
+#ifndef CPPRACTICE_OUT_PUT_H
+#define CPPRACTICE_OUT_PUT_H
 
 
 class out_put {
@@ -27,4 +27,4 @@ void out_put::Swap(T &a, T &b) {
     b = temp;
 }
 
-#endif //UNTITLED_OUT_PUT_H
+#endif //CPPRACTICE_OUT_PUT_H

@@ -2,8 +2,8 @@
 // Created by DEV on 2021/10/29.
 //
 
-#ifndef UNTITLED_BOSS_H
-#define UNTITLED_BOSS_H
+#ifndef CPPRACTICE_BOSS_H
+#define CPPRACTICE_BOSS_H
 
 #include "worker.h"
 
@@ -16,4 +16,4 @@ public:
 };
 
 
-#endif //UNTITLED_BOSS_H
+#endif //CPPRACTICE_BOSS_H

@@ -2,8 +2,8 @@
 // Created by DEV on 2021/12/17.
 //
 
-#ifndef UNTITLED_TREE_MANAGER_H
-#define UNTITLED_TREE_MANAGER_H
+#ifndef CPPRACTICE_TREE_MANAGER_H
+#define CPPRACTICE_TREE_MANAGER_H
 
 class TreeManager{
 public:
@@ -32,4 +32,4 @@ public:
     bool isValidBST(TreeNode *root, int *low, int *high);
 };
 
-#endif //UNTITLED_TREE_MANAGER_H
+#endif //CPPRACTICE_TREE_MANAGER_H

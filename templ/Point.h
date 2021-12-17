@@ -2,8 +2,8 @@
 // Created by DEV on 2021/10/28.
 //
 
-#ifndef UNTITLED_POINT_H
-#define UNTITLED_POINT_H
+#ifndef CPPRACTICE_POINT_H
+#define CPPRACTICE_POINT_H
 
 template<class T1, class T2>
 class Point {
@@ -41,4 +41,4 @@ void Point<T1, T2>::SetY(T2 y){
     m_y_ = y;
 }
 
-#endif //UNTITLED_POINT_H
+#endif //CPPRACTICE_POINT_H

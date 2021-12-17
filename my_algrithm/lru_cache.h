@@ -2,8 +2,8 @@
 // Created by DEV on 2021/11/2.
 //
 
-#ifndef UNTITLED_LRU_CACHE_H
-#define UNTITLED_LRU_CACHE_H
+#ifndef CPPRACTICE_LRU_CACHE_H
+#define CPPRACTICE_LRU_CACHE_H
 
 #include "map"
 using namespace std;
@@ -33,4 +33,4 @@ public:
     void MoveToTail(int key);
 };
 
-#endif //UNTITLED_LRU_CACHE_H
+#endif //CPPRACTICE_LRU_CACHE_H

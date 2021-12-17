@@ -2,8 +2,8 @@
 // Created by DEV on 2021/11/1.
 //
 
-#ifndef UNTITLED_TREE_NODE_H
-#define UNTITLED_TREE_NODE_H
+#ifndef CPPRACTICE_TREE_NODE_H
+#define CPPRACTICE_TREE_NODE_H
 
 #include "vector"
 using namespace std;
@@ -17,4 +17,4 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-#endif //UNTITLED_TREE_NODE_H
+#endif //CPPRACTICE_TREE_NODE_H
