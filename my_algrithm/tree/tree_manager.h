@@ -30,6 +30,12 @@ public:
     bool isValidBST(TreeNode *root);
 
     bool isValidBST(TreeNode *root, int *low, int *high);
+
+    int numTrees(int n);
+
+    vector<TreeNode*> generateTrees(int n);
+
+    vector<TreeNode*> generateTrees(int left, int right);
 };
 
 #endif //CPPRACTICE_TREE_MANAGER_H

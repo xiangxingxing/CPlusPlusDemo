@@ -8,6 +8,7 @@
 #include "company/worker.h"
 #include "company/boss.h"
 #include "stlib/std_manager.h"
+#include "model/person.h"
 
 #include <iostream>
 #include <fstream>
@@ -34,6 +35,14 @@ static void VectorDemo2();
 static void StringDemo1();
 static void MapDemo();
 static int JsonDemo();
+
+static void PointRefDemo1();
+//测试 指针or指针指向内容 是否能改变
+static void ConstTest1(Person * person);
+static void ConstTest2(const Person * person);
+static void ConstTest3(Person ** person);
+static void ReferTest1(Person & person);
+static void ReferTest2(const Person & person);
 
 void Print_Map(const map<int, int>& map1);
 
@@ -66,7 +75,9 @@ int main() {
     //StdManager::SetSortDemo();
 
     //MapDemo();
-    return JsonDemo();
+    //return JsonDemo();
+
+    PointRefDemo1();
     return 0;
 }
 
@@ -331,4 +342,47 @@ static int JsonDemo(){
 
     std::cout << root << std::endl;
     return EXIT_SUCCESS;
+}
+
+static void PointRefDemo1(){
+    auto p = new Person(20, "dev");
+    ConstTest1(p);
+    //ConstTest2(p);
+    //ConstTest3(&p);
+
+    //ReferTest1(*p);
+    if(p == nullptr){
+        std::cout << "p has been changed to null." << std::endl;
+    }
+    else{
+        p->ShowInfo();
+    }
+}
+
+void ConstTest1(Person * person){
+    //person = nullptr; ❌无效
+    person->age_ = 2;
+    person->name_ = "google";
+}
+
+void ConstTest2(const Person * person){
+    auto new_p = new Person(11, "kid");
+    person = new_p;//无效
+    //person->age_ = 1; ❌禁止
+}
+
+//函数修改指针本身地址
+void ConstTest3(Person ** person){
+    auto new_p = new Person(11, "kid");
+    *person = new_p;
+    //*person = nullptr;
+}
+
+void ReferTest1(Person & person){
+    person.name_ = "lol";
+    person.age_ = 10;
+}
+
+void ReferTest2(const Person & person){
+    //person.age_ = 1;//❌禁止
 }

@@ -185,13 +185,15 @@ bool TreeManager::isSymmetric(TreeNode *r1, TreeNode *r2) {
         return true;
     }
 
-    if (r1 != nullptr && r2 != nullptr) {
-        if (r1->val == r2->val) {
-            return isSymmetric(r1->left, r2->right) && isSymmetric(r1->right, r2->left);
-        }
+    if (r1 == nullptr || r2 == nullptr) {
+        return false;
     }
 
-    return false;
+    if(r1->val != r2->val){
+        return false;
+    }
+
+    return isSymmetric(r1->left, r2->right) && isSymmetric(r1->right, r2->left);
 }
 
 bool TreeManager::isValidBST(TreeNode *root) {
@@ -214,4 +216,45 @@ bool TreeManager::isValidBST(TreeNode *root, int *low, int *high) {
     return left && right;
 }
 
+// 96
+int TreeManager::numTrees(int n){
+    //auto dp = new int[n + 1];//dp[n]表示n个数能组成的bst总数
+    vector<int> dp(n + 1);
+    dp[0] = 1;
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= i; ++j) {
+            dp[i] += dp[j - 1] * dp[i - j];
+        }
+    }
+
+    return dp[n];
+}
+
+// 95
+vector<TreeNode*> TreeManager::generateTrees(int n) {
+    if(n == 0){
+        return {};
+    }
+    return generateTrees(1, n);
+}
+
+vector<TreeNode*> TreeManager::generateTrees(int start, int end){
+    vector<TreeNode*> ans;
+    if(start > end){
+        ans.push_back(nullptr);
+        return ans;
+    }
+    for (int i = start; i <= end; ++i) {
+        vector<TreeNode*> left_trees = generateTrees(start, i - 1);
+        vector<TreeNode*> right_trees = generateTrees(i + 1, end);
+        for (const auto &l_item : left_trees){
+            for (const auto &r_item : right_trees){
+                TreeNode * node = new TreeNode(i, l_item, r_item);
+                ans.push_back(node);
+            }
+        }
+    }
+
+    return ans;
+}
 
