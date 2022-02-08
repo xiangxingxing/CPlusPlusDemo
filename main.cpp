@@ -9,7 +9,8 @@
 #include "company/boss.h"
 #include "stlib/std_manager.h"
 #include "model/person.h"
-#include "model/SalaryManager.h"
+#include "model/salary_manager.h"
+#include "model/sales.h"
 
 #include <iostream>
 #include <fstream>
@@ -423,9 +424,15 @@ void ConstPointerTest(){
 }
 
 void OperatorDemo(){
-    SalaryManager s(3);
+    /*SalaryManager s(3);
     s["levi"] = 11.1;
     s["james"] = 22.2;
     s["kd"] = 33.3;
-    s.display();
+    s.display();*/
+
+    Sales s1("levi", "110110110", 18);
+    cout<<s1;
+    cout<<endl;
+    cin>>s1;
+    cout<<s1;
 }

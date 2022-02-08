@@ -2,8 +2,8 @@
 // Created by DEV on 2022/1/29.
 //
 
-#ifndef CPPRACTICE_SALARYMANAGER_H
-#define CPPRACTICE_SALARYMANAGER_H
+#ifndef CPPRACTICE_SALARY_MANAGER_H
+#define CPPRACTICE_SALARY_MANAGER_H
 
 #include "person.h"
 
@@ -47,4 +47,4 @@ public:
     }
 };
 
-#endif //CPPRACTICE_SALARYMANAGER_H
+#endif //CPPRACTICE_SALARY_MANAGER_H

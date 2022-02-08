@@ -19,7 +19,7 @@ public:
     int m_score_;
 };
 
-class PlayerComparsion{
+class PlayerComparison{
 public:
     //添加const后缀，避免警告：the specified comparator type does not provide a viable const call operator
     bool operator()(const Player& p1, const Player& p2) const{

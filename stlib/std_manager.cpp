@@ -137,13 +137,13 @@ void StdManager::SetSortDemo() {
     Player p3("blom", 30);
     Player p4("dog", 22);
 
-    set<Player, PlayerComparsion>s;
+    set<Player, PlayerComparison>s;
     s.insert(p1);
     s.insert(p2);
     s.insert(p3);
     s.insert(p4);
 
-    for(set<Player, PlayerComparsion>::iterator it = s.begin(); it != s.end(); it++){
+    for(set<Player, PlayerComparison>::iterator it = s.begin(); it != s.end(); it++){
         cout << it->m_name_ << "的分数为 " << it->m_score_ << endl;
     }
 }
