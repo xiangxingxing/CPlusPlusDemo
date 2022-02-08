@@ -17,7 +17,7 @@ public:
     string GetName() const;
     int GetAge() const;
     float GetScore() const;
-    friend void DisPlay(Student *pstu);
+    friend void DisPlay(Student &stu);
 
 public:
     static int GetTotal();

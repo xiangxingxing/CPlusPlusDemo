@@ -16,13 +16,24 @@ public:
     int age_;
     string name_;
 
-    Person(int age, string name) :
+    double salary_;
+
+    Person(){
+        age_ = 0;
+        name_ = "";
+        salary_ = 0;
+    }
+
+    Person(int age, string name, double salary = 0.0) :
             age_(age),
-            name_(std::move(name)){
+            name_(std::move(name)),
+            salary_(salary){
 
     }
 
-    void ShowInfo(){
+    ~Person()= default;
+
+    void ShowInfo() const{
         std::cout << "age = " << age_ << ", name = " << name_ << std::endl;
     }
 };

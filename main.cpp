@@ -9,6 +9,7 @@
 #include "company/boss.h"
 #include "stlib/std_manager.h"
 #include "model/person.h"
+#include "model/SalaryManager.h"
 
 #include <iostream>
 #include <fstream>
@@ -43,8 +44,11 @@ static void ConstTest2(const Person * person);
 static void ConstTest3(Person ** person);
 static void ReferTest1(Person & person);
 static void ReferTest2(const Person & person);
+static void ConstPointerTest();
 
 void Print_Map(const map<int, int>& map1);
+
+static void OperatorDemo();
 
 int main() {
     //out_put::BasicUserInputDemo();
@@ -77,7 +81,11 @@ int main() {
     //MapDemo();
     //return JsonDemo();
 
-    PointRefDemo1();
+    //PointRefDemo1();
+
+    //ConstPointerTest();
+
+    OperatorDemo();
     return 0;
 }
 
@@ -106,9 +114,9 @@ void ConstObjDemo(){
 //友元
 void FriendDemo(){
     Student stu("小明", 18, 88);
-    DisPlay(&stu);
+    DisPlay(stu);
     auto *pstu = new Student("李刚", 16, 99);
-    DisPlay(pstu);
+    DisPlay(*pstu);
 }
 
 void TemplateDemo(){
@@ -204,7 +212,7 @@ void FileBinaryDemo(){
     Student stu("", 0, 0);
     ifs.read((char *)&stu, sizeof(Student));
     //stu.show();
-    DisPlay(&stu);//调用友元函数
+    DisPlay(stu);//调用友元函数
     ifs.close();
 }
 
@@ -385,4 +393,39 @@ void ReferTest1(Person & person){
 
 void ReferTest2(const Person & person){
     //person.age_ = 1;//❌禁止
+}
+
+void ConstPointerTest(){
+    //const在*的左侧，表示指针指向的对象为常量
+    //const在*的右侧，表示指针本身为常量
+
+    //指向常量的指针
+    const int first = 1;
+    //int *p_first = &first;// ❌ 类型不匹配 得是：const int
+    const int *p_first = &first;// p_first是一个指向const int类型常量对象的指针，p_first本身并不是常量
+
+    //‼️ 非const对象的地址可以赋值给指向const对象的指针
+    int first_val = 1;
+    const int *p_first_val = &first_val;
+    //*p_first_val = 11;//❌
+
+    //const指针必须初始化
+    int num = 0;
+    int * const ptr = &num;
+    *ptr = 10;
+    cout << *ptr << endl;
+
+    //指向常量的常指针
+    //const常指针指向const常量
+    const int second = 2;
+    //int * const p2 = &second;//❌ error: 该常量指针p2指向的为int变量，而&second为常量的引用
+    const int * const p2 = &second;//✅ 该常量指针p2指向的为const int*常量类型
+}
+
+void OperatorDemo(){
+    SalaryManager s(3);
+    s["levi"] = 11.1;
+    s["james"] = 22.2;
+    s["kd"] = 33.3;
+    s.display();
 }

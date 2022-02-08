@@ -41,8 +41,8 @@ float Student::GetScore() const{
 }
 
 //全局范围内的非成员函数，不属于任何类 并不是Student::Display
-void DisPlay(Student *pstu) {
-    cout<<pstu->m_name_<<" 的年龄是 "<<pstu->m_age_<<",成绩是 "<<pstu->m_score_<<endl;
+void DisPlay(Student &pstu) {
+    cout<<pstu.m_name_<<" 的年龄是 "<<pstu.m_age_<<",成绩是 "<<pstu.m_score_<<endl;
 }
 
 Student::Student(const Student &stu) {
