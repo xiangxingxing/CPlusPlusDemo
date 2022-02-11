@@ -36,6 +36,8 @@ public:
     vector<TreeNode*> generateTrees(int n);
 
     vector<TreeNode*> generateTrees(int left, int right);
+
+    vector<string> binaryTreePaths(TreeNode * root);
 };
 
 #endif //CPPRACTICE_TREE_MANAGER_H

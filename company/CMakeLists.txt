@@ -1,0 +1,13 @@
+set(MY_SOURCES
+        ${MY_SOURCES}
+        company/boss.cpp
+        company/boss.h
+        company/employee.cpp
+        company/employee.h
+        company/manager.cpp
+        company/manager.h
+        company/worker.h
+        company/worker_manager.cpp
+        company/worker_manager.h
+        PARENT_SCOPE
+        )

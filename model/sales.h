@@ -30,9 +30,9 @@ Sales::Sales(const char *name, const char *id, int age) {
 }
 
 Sales& operator<<(ostream &os, Sales &s){
-    os<<s.name_<<"\t";
-    os<<s.id_<<"\t";
-    os<<s.age_<<endl;
+    os<< "name=" << s.name_<<"\t";
+    os<< "id=" << s.id_<<"\t";
+    os<< "age=" << s.age_<<endl;
     return s;
 }
 

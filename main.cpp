@@ -28,6 +28,7 @@ static void ClassTemplDemo();
 static void ListDemo();
 static void FileTextDemo();
 static void FileBinaryDemo();
+static void InOutputDemo();
 
 [[noreturn]] static void CompanyDemo();
 static void CompanyTest();
@@ -66,6 +67,7 @@ int main() {
     //ListDemo();
     //FileTextDemo();
     //FileBinaryDemo();
+    //InOutputDemo();
 
     //CompanyDemo();
     //CompanyTest();
@@ -215,6 +217,24 @@ void FileBinaryDemo(){
     //stu.show();
     DisPlay(stu);//调用友元函数
     ifs.close();
+}
+
+void InOutputDemo(){
+    char ch;
+    //hello my name is alex -> hellomynameisalex 忽略了空格、换行
+//    while(cin >> ch){
+//        cout << ch;
+//    }
+
+    //hello my name is alex -> hello my name is alex
+    //get()并不会读取newline字符
+//    while(cin.get(ch)){
+//        cout << ch;
+//    }
+
+    char strBuf[11];
+    cin.getline(strBuf, 11);//读取10个字符，末尾为'/0'
+    cout << strBuf << '\n';
 }
 
 [[noreturn]] void CompanyDemo(){

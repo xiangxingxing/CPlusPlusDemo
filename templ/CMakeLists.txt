@@ -1,0 +1,9 @@
+set(MY_SOURCES
+        ${MY_SOURCES}
+        templ/List.cpp
+        templ/List.h
+        templ/Point.cpp
+        templ/Point.h
+        templ/templates.h
+        templ/PARENT_SCOPE
+        )

@@ -8,6 +8,7 @@
 #include "stack"
 #include "queue"
 
+#include "string"
 using namespace std;
 
 vector<int> TreeManager::preorderTraversal(TreeNode *root) {
@@ -258,3 +259,29 @@ vector<TreeNode*> TreeManager::generateTrees(int start, int end){
     return ans;
 }
 
+//https://www.lintcode.com/problem/480/
+//输入：{1,2,3,#,5}
+//输出：["1->2->5","1->3"]
+vector<string> binaryTreePaths(TreeNode * root) {
+    // write your code here
+    vector<string> res;
+    if (root == nullptr){
+        return res;
+    }
+    if(root->left == nullptr && root->right == nullptr){
+        res.push_back(to_string(root->val) + "");
+        return res;
+    }
+
+    auto left = binaryTreePaths(root->left);
+    for (auto & str : left){
+        res.push_back(to_string(root->val) + "->" + str);
+    }
+
+    auto right = binaryTreePaths(root->right);
+    for (auto & str : right){
+        res.push_back(to_string(root->val) + "->" + str);
+    }
+
+    return res;
+}
