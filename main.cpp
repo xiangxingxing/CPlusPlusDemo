@@ -47,10 +47,12 @@ static void ConstTest3(Person ** person);
 static void ReferTest1(Person & person);
 static void ReferTest2(const Person & person);
 static void ConstPointerTest();
+static void PointerTest();
 
 void Print_Map(const map<int, int>& map1);
 
 static void OperatorDemo();
+static void SwapDemo(float * f1, float * f2);
 
 int main() {
     //out_put::BasicUserInputDemo();
@@ -84,11 +86,14 @@ int main() {
     //MapDemo();
     //return JsonDemo();
 
-    //PointRefDemo1();
+    PointRefDemo1();
 
     //ConstPointerTest();
 
-    OperatorDemo();
+    //OperatorDemo();
+
+    //PointerTest();
+
     return 0;
 }
 
@@ -374,18 +379,21 @@ static int JsonDemo(){
 }
 
 static void PointRefDemo1(){
-    auto p = new Person(20, "dev");
-    ConstTest1(p);
+    //auto p = new Person(20, "dev");
+    //ConstTest1(p);
     //ConstTest2(p);
     //ConstTest3(&p);
+//    if(p == nullptr){
+//        std::cout << "p has been changed to null." << std::endl;
+//    }
+//    else{
+//        p->ShowInfo();
+//    }
 
-    //ReferTest1(*p);
-    if(p == nullptr){
-        std::cout << "p has been changed to null." << std::endl;
-    }
-    else{
-        p->ShowInfo();
-    }
+    Person p(90, "dev", 100);
+    p.ShowInfo();
+    ReferTest1(p);
+    p.ShowInfo();
 }
 
 void ConstTest1(Person * person){
@@ -410,6 +418,9 @@ void ConstTest3(Person ** person){
 void ReferTest1(Person & person){
     person.name_ = "lol";
     person.age_ = 10;
+
+    Person np(11, "ll", 111);
+    person = np;
 }
 
 void ReferTest2(const Person & person){
@@ -455,4 +466,18 @@ void OperatorDemo(){
     cout<<endl;
     cin>>s1;
     cout<<s1;
+}
+
+void PointerTest(){
+    float a = 1.3f;
+    float b = 2.4f;
+    cout << "before : a = " << a << ", b = " << b << endl;
+    SwapDemo(&a, &b);
+    cout << "after swap : a = " << a << ", b = " << b << endl;
+}
+
+void SwapDemo(float * f1, float * f2){
+    float temp = *f1;
+    *f1 = *f2;
+    *f2 = temp;
 }
