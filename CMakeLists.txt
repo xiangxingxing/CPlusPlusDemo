@@ -18,5 +18,5 @@ message("LIBRARIES = ${LIBRARIES}")
 
 
 add_executable(CPPractice main.cpp out_put.cpp out_put.h
-        ${MY_SOURCES})
+        ${MY_SOURCES} my_algrithm/sort/quick_sorter.h my_algrithm/sort/quick_sorter.cpp)
 TARGET_LINK_LIBRARIES(CPPractice ${LIBRARIES})

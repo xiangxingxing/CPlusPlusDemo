@@ -16,7 +16,8 @@
 #include <fstream>
 #include "vector"
 #include "map"
-#include "json/json.h"
+//#include "json/json.h"
+#include "my_algrithm/sort/quick_sorter.h"
 
 using namespace std;
 
@@ -54,6 +55,8 @@ void Print_Map(const map<int, int>& map1);
 static void OperatorDemo();
 static void SwapDemo(float * f1, float * f2);
 
+static void QuickSortDemo();
+
 int main() {
     //out_put::BasicUserInputDemo();
     //out_put::BasicOutputFormatDemo();
@@ -86,13 +89,15 @@ int main() {
     //MapDemo();
     //return JsonDemo();
 
-    PointRefDemo1();
+    //PointRefDemo1();
 
     //ConstPointerTest();
 
     //OperatorDemo();
 
     //PointerTest();
+
+	QuickSortDemo();
 
     return 0;
 }
@@ -362,19 +367,19 @@ void Print_Map(const map<int, int>& m){
 }
 
 static int JsonDemo(){
-    Json::Value root;
-    std::ifstream ifs;
-    ifs.open("/Users/dev/shared/file/demo.json");
-
-    Json::CharReaderBuilder builder;
-    builder["collectComments"] = false;
-    JSONCPP_STRING errs;
-    if(!Json::parseFromStream(builder, ifs, &root, &errs)){
-        std::cout << errs << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    std::cout << root << std::endl;
+//    Json::Value root;
+//    std::ifstream ifs;
+//    ifs.open("/Users/dev/shared/file/demo.json");
+//
+//    Json::CharReaderBuilder builder;
+//    builder["collectComments"] = false;
+//    JSONCPP_STRING errs;
+//    if(!Json::parseFromStream(builder, ifs, &root, &errs)){
+//        std::cout << errs << std::endl;
+//        return EXIT_FAILURE;
+//    }
+//
+//    std::cout << root << std::endl;
     return EXIT_SUCCESS;
 }
 
@@ -420,7 +425,7 @@ void ReferTest1(Person & person){
     person.age_ = 10;
 
     Person np(11, "ll", 111);
-    person = np;
+    person = np;//赋值有效
 }
 
 void ReferTest2(const Person & person){
@@ -480,4 +485,16 @@ void SwapDemo(float * f1, float * f2){
     float temp = *f1;
     *f1 = *f2;
     *f2 = temp;
+}
+
+void QuickSortDemo()
+{
+	vector<int> v = { -1, 0, 3, 8, 2, 5, 1, 27, 10, 14, 9, 8, 26 };
+//	QuickSorter::QuickSortLomuto(v, 0, v.size() - 1);
+//	QuickSorter::QuickSortHoare(v, 0, v.size() - 1);
+	QuickSorter::QuickSortBook(v, 0, v.size() - 1);
+	for (const auto& item: v)
+	{
+		cout << item << " ";
+	}
 }
