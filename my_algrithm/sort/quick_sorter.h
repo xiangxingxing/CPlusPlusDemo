@@ -6,6 +6,7 @@
 #define CPPRACTICE_QUICK_SORTER_H
 
 #include "vector"
+#include "../../include/generic.h"
 
 using namespace std;
 
@@ -127,7 +128,18 @@ void QuickSorter::QuickSortBook(vector<T>& array, int low, int high)
 template<typename T>
 int QuickSorter::QuickSortBookInternal(vector<T>& array, int low, int high)
 {
-	int index = (low + high) / 2;
+	//int index = (low + high) / 2;
+	//int index = RANDOM(low, high);
+
+//	std::random_device rd;
+//	std::mt19937 mt(rd());
+//	std::uniform_int_distribution<int> dist(low, high);
+//	std::uniform_real_distribution<double> dist(, ); //小数型的随机数
+
+//通过宏定义
+	int index = RANDOM11(low, high);
+	cout << "index = " << index << endl;
+
 	SwapAt(array, low, index);
 	T pivot = array[low];
 

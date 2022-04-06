@@ -3,4 +3,5 @@ set(MY_SOURCES
         model/person.h
         model/salary_manager.h
         model/sales.h
+        PARENT_SCOPE
         )
