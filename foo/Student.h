@@ -16,6 +16,7 @@ public:
     void show();
     string GetName() const;
     int GetAge() const;
+    void SetAge(int age);
     float GetScore() const;
     friend void DisPlay(Student &stu);
 

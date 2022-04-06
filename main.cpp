@@ -35,11 +35,14 @@ static void CompanyTest();
 
 static void VectorDemo();
 static void VectorDemo2();
+const vector<int>& VectorDemo3();
+vector<Student *>& VectorDemo4();
 static void StringDemo1();
 static void MapDemo();
 static int JsonDemo();
 
 static void PointRefDemo1();
+static void ConstInputTest(const Person * person);
 //测试 指针or指针指向内容 是否能改变
 static void ConstTest1(Person * person);
 static void ConstTest2(const Person * person);
@@ -53,6 +56,9 @@ void Print_Map(const map<int, int>& map1);
 
 static void OperatorDemo();
 static void SwapDemo(float * f1, float * f2);
+
+static vector<int> integers_;
+static vector<Student *> students_;
 
 int main() {
     //out_put::BasicUserInputDemo();
@@ -86,7 +92,7 @@ int main() {
     //MapDemo();
     //return JsonDemo();
 
-    PointRefDemo1();
+    //PointRefDemo1();
 
     //ConstPointerTest();
 
@@ -94,7 +100,86 @@ int main() {
 
     //PointerTest();
 
-    return 0;
+	/** region ## test vectorDemo3 ## */
+
+//	auto array = VectorDemo3();
+//	array.push_back(100);
+//	array[0] = 111;
+//
+//	cout << "array == integers_ = " << (array == integers_) << endl; // 0 = false
+//
+//	cout<< "in integers_: " <<endl;
+//	for (auto & elem : integers_) {
+//		cout<< elem << " " ;
+//	}
+//	cout<<endl;
+//
+//	cout << "\nin array:" << endl;
+//	for (auto & elem : array) {
+//		cout<< elem << " ";
+//	}
+	/** endregion */
+
+	/** region ## test vectorDemo4 ## */
+	//结论：
+	// 1.返回 const vector<Student *>& 引用后，修改指针成员变量的内容是ok的,但是增删的话，对原数组无效
+	// 2.返回数组的引用后，用来做修改操作的话引用是不变的，但增删的话，引用就改变，与原数组引用不一样了【应该是经过了复制】
+	// ‼️VectorDemo4().push_back(new_one);可以直接增删‼️
+
+//	auto student_list = VectorDemo4();
+//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
+//
+//	for (const auto& item: student_list)
+//	{
+//		DisPlay(*item);
+//	}
+//
+//	for (auto & elem : student_list) {
+//		elem->SetAge(100);
+//	}
+//	//student_list.clear();
+	auto new_one = new Student("e", 77, 77);
+//	student_list.push_back(new_one);
+
+	//‼️ 这样可以对源数组进行直接增删的操作 ‼️
+	VectorDemo4().push_back(new_one);
+
+//	students_.push_back(new_one);
+
+//	cout << "after 1 change:" <<endl;
+//	for (const auto& item: student_list)
+//	{
+//		DisPlay(*item);
+//	}
+//	cout << endl;
+//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
+
+	cout << "in origin students_" << endl;
+	for (const auto& item: students_)
+	{
+		DisPlay(*item);
+	}
+//
+//	auto new_two = new Student("f", 66, 66);
+//	students_.push_back(new_two);
+////	students_.push_back(new_one);
+//
+//	cout << "after 2 change:" <<endl;
+//
+//	for (const auto& item: student_list)
+//	{
+//		DisPlay(*item);
+//	}
+//	cout << endl;
+//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
+//
+//	cout << "in origin students_" << endl;
+//	for (const auto& item: students_)
+//	{
+//		DisPlay(*item);
+//	}
+	/** endregion */
+	return 0;
 }
 
 void GetSetDemo(){
@@ -312,7 +397,7 @@ void VectorDemo2() {
     v.push_back(&stu3);
     v.push_back(&stu4);
 
-/*    for (auto it = v.begin(); it != v.end() ; it++) {
+/*    for (auto it = integers_.begin(); it != integers_.end() ; it++) {
         (*it)->show();
     }*/
 
@@ -325,6 +410,28 @@ void VectorDemo2() {
     for(Student* & elem : v2){
         elem->show();
     }
+}
+
+const vector<int>& VectorDemo3()
+{
+	integers_.push_back(10);
+	integers_.push_back(11);
+	integers_.push_back(12);
+	return integers_;
+}
+
+ vector<Student *>& VectorDemo4()
+{
+	Student* stu1 = new Student("a", 18, 90);
+	Student* stu2 = new Student("b", 19, 89);
+	Student* stu3 = new Student("c", 20, 88);
+	Student* stu4 = new Student("d", 21, 92);
+	students_.push_back(stu1);
+	students_.push_back(stu2);
+	students_.push_back(stu3);
+	students_.push_back(stu4);
+
+	return students_;
 }
 
 void StringDemo1(){
@@ -391,9 +498,19 @@ static void PointRefDemo1(){
 //    }
 
     Person p(90, "dev", 100);
-    p.ShowInfo();
-    ReferTest1(p);
-    p.ShowInfo();
+//    p.ShowInfo();
+//    ReferTest1(p);
+//    p.ShowInfo();
+
+    auto * p1 = new Person(10, "leb", 30);
+    auto * p2 = new Person(10, "leb", 30);
+    vector<Person *> vec;
+    vec.push_back(p1);
+    vec.push_back(p2);
+}
+
+static void ConstInputTest(const Person * person){
+
 }
 
 void ConstTest1(Person * person){
@@ -439,6 +556,7 @@ void ConstPointerTest(){
     //‼️ 非const对象的地址可以赋值给指向const对象的指针
     int first_val = 1;
     const int *p_first_val = &first_val;
+	int* const q_first_val = &first_val;
     //*p_first_val = 11;//❌
 
     //const指针必须初始化

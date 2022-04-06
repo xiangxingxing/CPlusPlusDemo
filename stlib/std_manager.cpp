@@ -30,7 +30,7 @@ void StdManager::VectorDemo() {
 //    }
 
     //第二种遍历
-//    for (vector<int>::iterator it = v.begin(); it != v.end() ; it++) {
+//    for (vector<int>::iterator it = integers_.begin(); it != integers_.end() ; it++) {
 //        cout << *it << endl;
 //    }
 

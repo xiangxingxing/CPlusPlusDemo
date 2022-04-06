@@ -50,3 +50,8 @@ Student::Student(const Student &stu) {
     m_score_ = stu.m_score_;
     m_age_ = stu.m_age_;
 }
+
+void Student::SetAge(int age)
+{
+	m_age_ = age;
+}
