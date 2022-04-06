@@ -12,7 +12,7 @@ using namespace std;
 class StdManager{
 public:
     static void my_print(int val);
-    static void VectorDemo();
+    static void VectorTraversal();
     static void VectorFuncDemo();
     static void StringConstructDemo();
     static void SetSortDemo();

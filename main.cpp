@@ -16,7 +16,8 @@
 #include <fstream>
 #include "vector"
 #include "map"
-#include "json/json.h"
+//#include "json/json.h"
+#include "my_algrithm/sort/quick_sorter.h"
 
 using namespace std;
 
@@ -60,6 +61,8 @@ static void SwapDemo(float * f1, float * f2);
 static vector<int> integers_;
 static vector<Student *> students_;
 
+static void QuickSortDemo();
+
 int main() {
     //out_put::BasicUserInputDemo();
     //out_put::BasicOutputFormatDemo();
@@ -82,7 +85,7 @@ int main() {
 
     //system("ls");
 
-    //VectorDemo();
+    //VectorTraversal();
     //VectorDemo2();
     //StringDemo1();
 
@@ -100,86 +103,11 @@ int main() {
 
     //PointerTest();
 
-	/** region ## test vectorDemo3 ## */
+	VectorDemo();
 
-//	auto array = VectorDemo3();
-//	array.push_back(100);
-//	array[0] = 111;
-//
-//	cout << "array == integers_ = " << (array == integers_) << endl; // 0 = false
-//
-//	cout<< "in integers_: " <<endl;
-//	for (auto & elem : integers_) {
-//		cout<< elem << " " ;
-//	}
-//	cout<<endl;
-//
-//	cout << "\nin array:" << endl;
-//	for (auto & elem : array) {
-//		cout<< elem << " ";
-//	}
-	/** endregion */
+	QuickSortDemo();
 
-	/** region ## test vectorDemo4 ## */
-	//结论：
-	// 1.返回 const vector<Student *>& 引用后，修改指针成员变量的内容是ok的,但是增删的话，对原数组无效
-	// 2.返回数组的引用后，用来做修改操作的话引用是不变的，但增删的话，引用就改变，与原数组引用不一样了【应该是经过了复制】
-	// ‼️VectorDemo4().push_back(new_one);可以直接增删‼️
-
-//	auto student_list = VectorDemo4();
-//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
-//
-//	for (const auto& item: student_list)
-//	{
-//		DisPlay(*item);
-//	}
-//
-//	for (auto & elem : student_list) {
-//		elem->SetAge(100);
-//	}
-//	//student_list.clear();
-	auto new_one = new Student("e", 77, 77);
-//	student_list.push_back(new_one);
-
-	//‼️ 这样可以对源数组进行直接增删的操作 ‼️
-	VectorDemo4().push_back(new_one);
-
-//	students_.push_back(new_one);
-
-//	cout << "after 1 change:" <<endl;
-//	for (const auto& item: student_list)
-//	{
-//		DisPlay(*item);
-//	}
-//	cout << endl;
-//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
-
-	cout << "in origin students_" << endl;
-	for (const auto& item: students_)
-	{
-		DisPlay(*item);
-	}
-//
-//	auto new_two = new Student("f", 66, 66);
-//	students_.push_back(new_two);
-////	students_.push_back(new_one);
-//
-//	cout << "after 2 change:" <<endl;
-//
-//	for (const auto& item: student_list)
-//	{
-//		DisPlay(*item);
-//	}
-//	cout << endl;
-//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
-//
-//	cout << "in origin students_" << endl;
-//	for (const auto& item: students_)
-//	{
-//		DisPlay(*item);
-//	}
-	/** endregion */
-	return 0;
+    return 0;
 }
 
 void GetSetDemo(){
@@ -382,7 +310,87 @@ void CompanyTest(){
 }
 
 void VectorDemo(){
-    StdManager::VectorDemo();
+	//StdManager::VectorTraversal();
+
+	/** region ## test vectorDemo3 ## */
+
+//	auto array = VectorDemo3();
+//	array.push_back(100);
+//	array[0] = 111;
+//
+//	cout << "array == integers_ = " << (array == integers_) << endl; // 0 = false
+//
+//	cout<< "in integers_: " <<endl;
+//	for (auto & elem : integers_) {
+//		cout<< elem << " " ;
+//	}
+//	cout<<endl;
+//
+//	cout << "\nin array:" << endl;
+//	for (auto & elem : array) {
+//		cout<< elem << " ";
+//	}
+	/** endregion */
+
+	/** region ## test vectorDemo4 ## */
+	//结论：
+	// 1.返回 const vector<Student *>& 引用后，修改指针成员变量的内容是ok的,但是增删的话，对原数组无效
+	// 2.返回数组的引用后，用来做修改操作的话引用是不变的，但增删的话，引用就改变，与原数组引用不一样了【应该是经过了复制】
+	// ‼️VectorDemo4().push_back(new_one);可以直接增删‼️
+
+//	auto student_list = VectorDemo4();
+//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
+//
+//	for (const auto& item: student_list)
+//	{
+//		DisPlay(*item);
+//	}
+//
+//	for (auto & elem : student_list) {
+//		elem->SetAge(100);
+//	}
+//	//student_list.clear();
+	auto new_one = new Student("e", 77, 77);
+//	student_list.push_back(new_one);
+
+	//‼️ 这样可以对源数组进行直接增删的操作 ‼️
+	VectorDemo4().push_back(new_one);
+
+//	students_.push_back(new_one);
+
+//	cout << "after 1 change:" <<endl;
+//	for (const auto& item: student_list)
+//	{
+//		DisPlay(*item);
+//	}
+//	cout << endl;
+//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
+
+	cout << "in origin students_" << endl;
+	for (const auto& item: students_)
+	{
+		DisPlay(*item);
+	}
+//
+//	auto new_two = new Student("f", 66, 66);
+//	students_.push_back(new_two);
+////	students_.push_back(new_one);
+//
+//	cout << "after 2 change:" <<endl;
+//
+//	for (const auto& item: student_list)
+//	{
+//		DisPlay(*item);
+//	}
+//	cout << endl;
+//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
+//
+//	cout << "in origin students_" << endl;
+//	for (const auto& item: students_)
+//	{
+//		DisPlay(*item);
+//	}
+	/** endregion */
 }
 
 
@@ -469,19 +477,19 @@ void Print_Map(const map<int, int>& m){
 }
 
 static int JsonDemo(){
-    Json::Value root;
-    std::ifstream ifs;
-    ifs.open("/Users/dev/shared/file/demo.json");
-
-    Json::CharReaderBuilder builder;
-    builder["collectComments"] = false;
-    JSONCPP_STRING errs;
-    if(!Json::parseFromStream(builder, ifs, &root, &errs)){
-        std::cout << errs << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    std::cout << root << std::endl;
+//    Json::Value root;
+//    std::ifstream ifs;
+//    ifs.open("/Users/dev/shared/file/demo.json");
+//
+//    Json::CharReaderBuilder builder;
+//    builder["collectComments"] = false;
+//    JSONCPP_STRING errs;
+//    if(!Json::parseFromStream(builder, ifs, &root, &errs)){
+//        std::cout << errs << std::endl;
+//        return EXIT_FAILURE;
+//    }
+//
+//    std::cout << root << std::endl;
     return EXIT_SUCCESS;
 }
 
@@ -537,7 +545,7 @@ void ReferTest1(Person & person){
     person.age_ = 10;
 
     Person np(11, "ll", 111);
-    person = np;
+    person = np;//赋值有效
 }
 
 void ReferTest2(const Person & person){
@@ -598,4 +606,16 @@ void SwapDemo(float * f1, float * f2){
     float temp = *f1;
     *f1 = *f2;
     *f2 = temp;
+}
+
+void QuickSortDemo()
+{
+	vector<int> v = { -1, 0, 3, 8, 2, 5, 1, 27, 10, 14, 9, 8, 26 };
+//	QuickSorter::QuickSortLomuto(v, 0, v.size() - 1);
+//	QuickSorter::QuickSortHoare(v, 0, v.size() - 1);
+	QuickSorter::QuickSortBook(v, 0, v.size() - 1);
+	for (const auto& item: v)
+	{
+		cout << item << " ";
+	}
 }
