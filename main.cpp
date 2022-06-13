@@ -105,7 +105,7 @@ int main() {
 
 	VectorDemo();
 
-	QuickSortDemo();
+	//QuickSortDemo();
 
     return 0;
 }
@@ -333,28 +333,38 @@ void VectorDemo(){
 	/** endregion */
 
 	/** region ## test vectorDemo4 ## */
-	//结论：
-	// 1.返回 const vector<Student *>& 引用后，修改指针成员变量的内容是ok的,但是增删的话，对原数组无效
-	// 2.返回数组的引用后，用来做修改操作的话引用是不变的，但增删的话，引用就改变，与原数组引用不一样了【应该是经过了复制】
+	//结论‼️更新‼️：
+	// 1.返回 auto student_list 即 vector<Student *> student_list 后，新数组对原数组进行了复制，
+	// 	 修改新数组指针成员变量的内容是ok的,但是增删的话，对原数组无效
+	// 2.返回 auto& student_list 即 vector<Student *>& student_list 后，新数组与原数组一致，增删改均影响原数组
+	// 3.返回数组后，用来做修改操作的话引用是不变的，但增删的话，引用就改变，与原数组引用不一样了【应该是经过了复制】，返回原数组引用&则保持更新一致
 	// ‼️VectorDemo4().push_back(new_one);可以直接增删‼️
 
-//	auto student_list = VectorDemo4();
-//	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
-//
-//	for (const auto& item: student_list)
-//	{
-//		DisPlay(*item);
-//	}
-//
-//	for (auto & elem : student_list) {
-//		elem->SetAge(100);
-//	}
+	//auto student_list = VectorDemo4();//‼️区分‼️
+	auto& student_list = VectorDemo4();//‼️区分‼️
+	cout << "student_list == students_ = " << (student_list == students_) << endl; // 1 = true (0 = false)
+
+	for (const auto& item: student_list)
+	{
+		DisPlay(*item);
+	}
+
+	for (auto & elem : student_list) {
+		elem->SetAge(100);
+	}
 //	//student_list.clear();
 	auto new_one = new Student("e", 77, 77);
-//	student_list.push_back(new_one);
+	student_list.push_back(new_one);
+
+	cout << "student_list == students_ = " << (student_list == students_) << endl; // 0 = false
+
+	for (int i = 0; i < students_.size(); ++i)
+	{
+		cout << "student_list.at(i) == students_.at(i) " << (student_list.at(i) == students_.at(i)) << endl; // 1 = true
+	}
 
 	//‼️ 这样可以对源数组进行直接增删的操作 ‼️
-	VectorDemo4().push_back(new_one);
+	//VectorDemo4().push_back(new_one);
 
 //	students_.push_back(new_one);
 
@@ -369,6 +379,7 @@ void VectorDemo(){
 	cout << "in origin students_" << endl;
 	for (const auto& item: students_)
 	{
+		//item->SetAge(100);
 		DisPlay(*item);
 	}
 //
