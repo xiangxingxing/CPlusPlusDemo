@@ -86,7 +86,7 @@ int main() {
     //system("ls");
 
     //VectorTraversal();
-    //VectorDemo2();
+    VectorDemo2();
     //StringDemo1();
 
     //StdManager::PlayerDemo();
@@ -103,7 +103,7 @@ int main() {
 
     //PointerTest();
 
-	VectorDemo();
+	//VectorDemo();
 
 	//QuickSortDemo();
 
@@ -407,10 +407,10 @@ void VectorDemo(){
 
 void VectorDemo2() {
     vector<Student*> v;
-    Student stu1("a", 18, 90);
-    Student stu2("b", 19, 89);
-    Student stu3("c", 20, 88);
-    Student stu4("d", 21, 92);
+    Student stu1("a", 11, 111);
+    Student stu2("b", 22, 222);
+    Student stu3("c", 33, 333);
+    Student stu4("d", 44, 444);
     v.push_back(&stu1);
     v.push_back(&stu2);
     v.push_back(&stu3);
@@ -425,10 +425,49 @@ void VectorDemo2() {
     }
 
     //拷贝构造
-    vector<Student*> v2(v);
-    for(Student* & elem : v2){
-        elem->show();
-    }
+//    vector<Student*> v2(v);
+//    for(Student* & elem : v2){
+//        elem->show();
+//    }
+	//v2[0] = new Student("e", 19, 89);
+
+	//1.引用
+	//const vector<Student*> v3 = v;
+	//auto& s3 = v3.at(0);
+	//s3 = new Student("e", 19, 89);//‼️当v3是const、并且s3为取v3中第0个元素的引用【别名】时，s3禁止重新new，因为不能给Student* const&赋值
+
+	//2.const赋值拷贝
+	//const vector<Student*> v3 = v;
+	////‼️当v3是const、并且s3为取v3中第0个元素的指针时，s3可以重新new，但跟原v3.at(0)没有关系了，因为v3[0]指针进行了拷贝
+	////auto* s3 = v3.at(0);//指针拷贝给了s3
+	//auto s3 = v3.at(0);
+	//s3 = new Student("e", 19, 89);//‼️s3指针指向别处，跟原v3.at(0)没有关系,不会修改原先指向的内容
+
+	//v3[0] = new Student("e", 55, 555);//‼️当v3是const时禁止，因为v3是常量数组，它不能更改某一个位置上的对象，此处为Student* const&
+
+	//3.赋值构造
+	vector<Student*> v3 = v;
+	//auto& s3 = v3.at(0);
+	////‼️当v3是const、并且s3为取v3中第0个元素的引用时禁止，不能给Student* const&赋值
+	////‼️当v3是const、并且s3为取v3中第0个元素的指针时可以new，但跟原v3.at(0)没有关系了，因为v3[0]指针进行了拷贝
+	//s3 = new Student("e", 55, 555);//✅ 可以修改v3，但无法修改v[0]
+
+	auto* s = v3.at(0);//指针进行了copy
+	s->SetAge(000);//可以修改原数组v的成员的内容,因为拷贝后的指针与V[0]均指向同一位置
+	v3[0] = new Student("e", 55, 555); //v3[0]指向新实例，但不会影响v[0]的指向
+
+	//auto s4 = new Student("f", 88, 99);
+	//v3.push_back(s4);//v3被const修饰时则不能push_back
+
+	cout << "after operated :" << endl;
+	cout << "In new v3 :" << endl;
+	for (auto & elem : v3) {
+		elem->show();
+	}
+	cout << "In origin v :" << endl;
+	for (auto & elem : v) {
+		elem->show();
+	}
 }
 
 const vector<int>& VectorDemo3()
@@ -563,6 +602,10 @@ void ReferTest2(const Person & person){
     //person.age_ = 1;//❌禁止
 }
 
+/*
+ * https://www.zhihu.com/question/443195492
+ * const默认作用于其左边的东西，若左边没有则作用于其右边的东西
+ * */
 void ConstPointerTest(){
     //const在*的左侧，表示指针指向的对象为常量
     //const在*的右侧，表示指针本身为常量
@@ -575,8 +618,9 @@ void ConstPointerTest(){
     //‼️ 非const对象的地址可以赋值给指向const对象的指针
     int first_val = 1;
     const int *p_first_val = &first_val;
+	//*p_first_val = 11;//❌
+
 	int* const q_first_val = &first_val;
-    //*p_first_val = 11;//❌
 
     //const指针必须初始化
     int num = 0;
