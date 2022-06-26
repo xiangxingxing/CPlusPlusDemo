@@ -17,7 +17,7 @@ m_name_(name), m_age_(age), m_score_(score){
 }
 
 void Student::show(){
-    cout<<m_name_<<"的年龄是"<<m_age_<<",成绩是"<<m_score_<<"有"<<k_total_<<"名学生"<<endl;
+    cout<<m_name_<<"的年龄是"<<m_age_<<",成绩是"<<m_score_<<", 有"<<k_total_<<"名学生实例"<<endl;
 }
 
 float Student::GetPoints() {
