@@ -3,5 +3,7 @@ set(MY_SOURCES
         model/person.h
         model/salary_manager.h
         model/sales.h
+        model/my_complex.h
+        model/my_complex.cpp
         PARENT_SCOPE
         )

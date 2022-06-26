@@ -9,8 +9,7 @@ LINK_DIRECTORIES(  /usr/local/Cellar/jsoncpp/1.9.4_1/lib )
 set(MY_SOURCES
         ${MY_SOURCES}
         out_put.h
-        out_put.cpp
-        )
+        out_put.cpp my_algrithm/sort/heap_sorter.h)
 
 add_subdirectory(include)
 add_subdirectory(company)

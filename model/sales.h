@@ -19,8 +19,9 @@ private:
 public:
     Sales(const char *name, const char *id, int age);
 
-    friend Sales &operator<<(ostream &os, Sales &s);
-    friend Sales &operator>>(istream &is, Sales &s);
+	friend Sales& operator<<(ostream& os, Sales& s);
+
+	friend Sales& operator>>(istream& is, Sales& s);
 };
 
 Sales::Sales(const char *name, const char *id, int age) {

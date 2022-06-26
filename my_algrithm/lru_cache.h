@@ -24,7 +24,7 @@ private:
     DLinkedNode* tail_;
 
 public:
-    LRUCache(int capacity);
+    explicit LRUCache(int capacity);
 
     int get(int key);
 

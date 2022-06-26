@@ -3,7 +3,7 @@
 //
 
 #include "lru_cache.h"
-#include "map"
+#include <map>
 using namespace std;
 
 LRUCache::LRUCache(int capacity) {
@@ -51,14 +51,14 @@ void LRUCache::put(int key, int value) {
 void LRUCache::MoveToTail(int key) {
     map<int, DLinkedNode*>::iterator iterator = key_to_pre_.find(key);
     auto pre_node = iterator->second;
-    DLinkedNode* cur_ndoe = pre_node->next_;
-    if (cur_ndoe == tail_){
+    DLinkedNode* cur_node = pre_node->next_;
+    if (cur_node == tail_){
         return;
     }
-    pre_node->next_ = cur_ndoe->next_;
-    cur_ndoe->next_ = nullptr;
-    tail_->next_ = cur_ndoe;
+    pre_node->next_ = cur_node->next_;
+	cur_node->next_ = nullptr;
+    tail_->next_ = cur_node;
     key_to_pre_[key] = tail_;
     key_to_pre_[pre_node->next_->key_] = pre_node;
-    tail_ = cur_ndoe;
+    tail_ = cur_node;
 }

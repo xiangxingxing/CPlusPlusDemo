@@ -18,6 +18,7 @@
 #include "map"
 //#include "json/json.h"
 #include "my_algrithm/sort/quick_sorter.h"
+#include "model/my_complex.h"
 
 using namespace std;
 
@@ -62,6 +63,7 @@ static vector<int> integers_;
 static vector<Student *> students_;
 
 static void QuickSortDemo();
+static void MyComplexDemo();
 
 int main() {
     //out_put::BasicUserInputDemo();
@@ -103,9 +105,11 @@ int main() {
 
     //PointerTest();
 
-	VectorDemo();
+	//VectorDemo();
 
-	QuickSortDemo();
+	//QuickSortDemo();
+
+	MyComplexDemo();
 
     return 0;
 }
@@ -618,4 +622,26 @@ void QuickSortDemo()
 	{
 		cout << item << " ";
 	}
+}
+
+void MyComplexDemo()
+{
+	Complex c1(5, 1);
+	Complex c2(2);
+	//c1 += c2;
+	cout << Real(c1) << endl;
+	cout << Imag(c2) << endl;
+
+	Complex c3 = c1 + c2;
+	Complex c4 = c1 + 5;
+	Complex c5 = 8 + c1;
+
+	Complex c6 = +c1;
+	Complex c7 = -c1;
+
+	c6.Real();
+
+	Complex c8 = conj(c1);
+	cout << "c1 : " << c1 << endl;;
+	cout << "c8 : " << c8 << endl;;
 }
