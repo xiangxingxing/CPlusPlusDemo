@@ -53,6 +53,7 @@ static void ReferTest1(Person & person);
 static void ReferTest2(const Person & person);
 static void ConstPointerTest();
 static void PointerTest();
+static std::shared_ptr<Person> SharedPointTest();
 
 void Print_Map(const map<int, int>& map1);
 
@@ -64,6 +65,11 @@ static vector<Student *> students_;
 
 static void QuickSortDemo();
 static void MyComplexDemo();
+
+static void LambdaExpression();
+static void LambdaExpression2();
+
+static void StdIterator();
 
 int main() {
     //out_put::BasicUserInputDemo();
@@ -88,7 +94,7 @@ int main() {
     //system("ls");
 
     //VectorTraversal();
-    VectorDemo2();
+    //VectorDemo2();
     //StringDemo1();
 
     //StdManager::PlayerDemo();
@@ -109,7 +115,17 @@ int main() {
 
 	//QuickSortDemo();
 
-	MyComplexDemo();
+	//MyComplexDemo();
+
+	//LambdaExpression();
+
+	//LambdaExpression2();
+
+	StdIterator();
+
+//	auto person = SharedPointTest();
+//	person->ShowInfo();
+//	cout << "person.use_count() = " << person.use_count();
 
     return 0;
 }
@@ -661,6 +677,12 @@ void PointerTest(){
     cout << "after swap : a = " << a << ", b = " << b << endl;
 }
 
+std::shared_ptr<Person> SharedPointTest()
+{
+	auto person = std::make_shared<Person>(19, "xxx", 2000);
+	return person;
+}
+
 void SwapDemo(float * f1, float * f2){
     float temp = *f1;
     *f1 = *f2;
@@ -699,4 +721,89 @@ void MyComplexDemo()
 	Complex c8 = conj(c1);
 	cout << "c1 : " << c1 << endl;;
 	cout << "c8 : " << c8 << endl;;
+}
+
+void LambdaExpression2()
+{
+	std::vector<int> v{1, 2, 2, 2, 3, 3, 4};
+	int n1 = 3;
+	int n2 = 5;
+	auto is_even = [](int i){ return i%2 == 0; };
+
+	auto result1 = std::find(begin(v), end(v), n1);
+	auto result2 = std::find(begin(v), end(v), n2);
+	auto result3 = std::find_if(begin(v), end(v), is_even);
+
+	(result1 != std::end(v))
+	? std::cout << "v contains " << n1 << '\n'
+	: std::cout << "v does not contain " << n1 << '\n';
+
+	(result2 != std::end(v))
+	? std::cout << "v contains " << n2 << '\n'
+	: std::cout << "v does not contain " << n2 << '\n';
+
+	(result3 != std::end(v))
+	? std::cout << "v contains an even number: " << *result3 << '\n'
+	: std::cout << "v does not contain even numbers\n";
+}
+
+void LambdaExpression()
+{
+	vector<Student*> list;
+	auto* stu1 = new Student("a", 18, 90);
+	auto* stu2 = new Student("b", 19, 89);
+	auto* stu3 = new Student("c", 20, 44);
+	auto* stu4 = new Student("d", 21, 55);
+
+	list.push_back(stu1);
+	list.push_back(stu2);
+	list.push_back(stu3);
+	list.push_back(stu4);
+
+	vector<std::shared_ptr<Student>> all_singer;
+
+	all_singer.push_back(static_cast<const shared_ptr<Student>>(stu1));
+	all_singer.push_back(static_cast<const shared_ptr<Student>>(stu2));
+	all_singer.push_back(static_cast<const shared_ptr<Student>>(stu3));
+	all_singer.push_back(static_cast<const shared_ptr<Student>>(stu4));
+
+	vector<std::shared_ptr<Student>> official_singer_list;
+
+	auto is_official = [](const std::shared_ptr<Student>& singer) {
+		return singer->GetScore() > 60;
+	};
+
+	std::copy_if(all_singer.begin(),
+			all_singer.end(),
+			std::inserter(official_singer_list,
+					official_singer_list.end()), is_official);
+
+//	std::copy_if(all_singer.begin(),
+//			all_singer.end(),
+//			std::back_inserter(official_singer_list), is_official);
+
+	for (auto item: official_singer_list)
+	{
+		DisPlay(*item);
+	}
+}
+
+void StdIterator()
+{
+	vector<Student*> list;
+	auto* stu1 = new Student("a", 18, 90);
+	auto* stu2 = new Student("b", 19, 89);
+	auto* stu3 = new Student("c", 20, 44);
+	auto* stu4 = new Student("d", 21, 55);
+
+	list.push_back(stu1);
+	list.push_back(stu2);
+	list.push_back(stu3);
+	list.push_back(stu4);
+
+	auto in_order = std::next(list.begin(), 2);
+	auto reverse_order = std::prev(list.end(), 2);
+
+	auto res = in_order == reverse_order;
+	cout << "in_order == reverse_order : " << (res ? "true" : "false");
 }
