@@ -16,7 +16,7 @@ public:
 	static void HeapSort(vector<T>& array);
 
 	template<typename T>
-	static void HeapAdjust(vector<T>& array, int index int last_index);
+	static void HeapAdjust(vector<T>& array, int index, int last_index);
 
 	template<typename T>
 	static void SwapAt(vector<T>& array, int i, int j);

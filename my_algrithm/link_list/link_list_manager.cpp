@@ -111,3 +111,88 @@ ListNode* LinkListManager::deleteDuplicates2(ListNode* head){
 
     return dummy->next;
 }
+
+bool LinkListManager::hasCycle(ListNode * head) {
+	// write your code here
+	if(head == nullptr || head->next == nullptr) return false;
+	ListNode* slow = head;
+	ListNode* fast = head;
+	while(fast != nullptr && fast->next != nullptr){
+		fast = fast->next->next;
+		slow = slow->next;
+		if(fast == slow){
+			return true;
+		}
+	}
+	return false;
+}
+
+ListNode* LinkListManager::detectCycle(ListNode *head) {
+	if(head == nullptr || head->next == nullptr) return nullptr;
+	ListNode* p = nodeOnCycle(head);
+	ListNode* q = head;
+	while(p != nullptr && q != nullptr){
+		if(p == q){
+			break;
+		}
+		p = p->next;
+		q = q->next;
+	}
+
+	return p;
+}
+
+ListNode* LinkListManager::nodeOnCycle(ListNode * head) {
+	// write your code here
+	if(head == nullptr || head->next == nullptr) return nullptr;
+	ListNode* slow = head;
+	ListNode* fast = head;
+	while(fast != nullptr && fast->next != nullptr){
+		fast = fast->next->next;
+		slow = slow->next;
+		if(fast == slow){
+			return fast;
+		}
+	}
+	return nullptr;
+}
+
+ListNode* LinkListManager::mergeKLists(vector<ListNode*> &lists){
+	if(lists.empty()){
+		return nullptr;
+	}
+
+	if(lists.size() == 1){
+		return lists.at(0);
+	}
+
+	for (size_t i = lists.size() - 1; i > 0; i--)
+	{
+		lists[0] = mergeTwo(lists.at(i), lists.at(0));
+	}
+
+	return lists[0];
+}
+
+ListNode* LinkListManager::mergeTwo(ListNode* l1, ListNode* l2){
+	if(l1 == nullptr && l2 == nullptr) return nullptr;
+	if(l1 == nullptr) return l2;
+	if(l2 == nullptr) return l1;
+
+	auto* dummy = new ListNode(0);
+	ListNode* p = dummy;
+	while (l1 != nullptr && l2 != nullptr){
+		if(l1->val < l2->val){
+			p->next = l1;
+			l1 = l1->next;
+		}
+		else{
+			p->next = l2;
+			l2 = l2->next;
+		}
+		p = p->next;
+	}
+	p->next = l1 != nullptr ? l1 : l2;
+
+	return dummy->next;
+}

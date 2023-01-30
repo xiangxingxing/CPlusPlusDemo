@@ -198,23 +198,37 @@ bool TreeManager::isSymmetric(TreeNode *r1, TreeNode *r2) {
 }
 
 bool TreeManager::isValidBST(TreeNode *root) {
-    return isValidBST(root, nullptr, nullptr);
+    return isValidBST(root, LONG_MIN, LONG_MAX);
 }
 
-bool TreeManager::isValidBST(TreeNode *root, int *low, int *high) {
-    if (root == nullptr) {
-        return true;
-    }
+bool TreeManager::isValidBST(TreeNode *root, long low, long high) {
+	if (root == nullptr){
+		return true;
+	}
 
-    int val = root->val;
-    if (low != nullptr && val <= *low) return false;
-    if (high != nullptr && val >= *high) return false;
+	if (root->val <= low || root->val >= high){
+		return false;
+	}
 
+	return isValidBST(root->left, low, root->val) && isValidBST(root->right, root->val, high);
+}
 
-    bool left = isValidBST(root->left, low, &val);
-    bool right = isValidBST(root->right, &val, high);
+int NOT_BALANCED = -1;
 
-    return left && right;
+bool TreeManager::isBalanced(TreeNode *root){
+	return balancedHelper(root) != NOT_BALANCED;
+}
+
+int TreeManager::balancedHelper(TreeNode *root){
+	if(root == nullptr) return 0;
+
+	int left = balancedHelper(root->left);
+	int right = balancedHelper(root->right);
+	if(left == NOT_BALANCED || right == NOT_BALANCED || abs(left - right) > 1){
+		return NOT_BALANCED;
+	}
+
+	return max(left, right) + 1;
 }
 
 // 96
@@ -262,7 +276,7 @@ vector<TreeNode*> TreeManager::generateTrees(int start, int end){
 //https://www.lintcode.com/problem/480/
 //输入：{1,2,3,#,5}
 //输出：["1->2->5","1->3"]
-vector<string> binaryTreePaths(TreeNode * root) {
+vector<string> TreeManager::binaryTreePaths(TreeNode * root) {
     // write your code here
     vector<string> res;
     if (root == nullptr){
@@ -284,4 +298,122 @@ vector<string> binaryTreePaths(TreeNode * root) {
     }
 
     return res;
+}
+
+// Encodes a tree to a single string.
+string TreeManager::serialize(TreeNode* root)
+{
+	if (root == nullptr)
+	{
+		return "{}";
+	}
+
+	vector<TreeNode*> nodes;
+	nodes.push_back(root);
+
+	int i = 0;
+	while (i < nodes.size())
+	{
+		if (nodes[i] != nullptr)
+		{
+			nodes.push_back(nodes[i]->left);
+			nodes.push_back(nodes[i]->right);
+		}
+
+		i++;
+	}
+
+	while (nodes.back() == nullptr)
+	{
+		nodes.pop_back();
+	}
+
+	if (nodes.empty()) {
+		return "{}";
+	}
+
+//	stringstream ss;
+//	ss << "{" << nodes[0]->val;
+//	for (int i = 1; i < nodes.size(); i++) {
+//		if (nodes[i] == nullptr) {
+//			ss << ",#";
+//		} else {
+//			ss << "," << nodes[i]->val;
+//		}
+//	}
+//	ss << "}";
+//
+//	return ss.str();
+
+	string res = "{" + to_string(nodes[0]->val);
+	for (int j = 1; j < nodes.size(); ++j)
+	{
+		if (nodes[j] == nullptr)
+		{
+			res += ",#";
+		}else
+		{
+			res += "," + to_string(nodes[j]->val);
+		}
+	}
+
+	res += "}";
+
+	return res;
+}
+
+// Decodes your encoded data to tree.
+TreeNode* TreeManager::deserialize(string data)
+{
+	if (data == "{}")
+	{
+		return nullptr;
+	}
+
+	vector<string> vals = split(data.substr(1, data.size() - 2), ",");
+	TreeNode *root = new TreeNode(atoi(vals[0].c_str()));
+	queue<TreeNode *> queue;
+	queue.push(root);
+
+	bool is_left_child = true;
+	for (int i = 1; i < vals.size(); ++i)
+	{
+		if (vals[i] != "#")
+		{
+			auto* n = new TreeNode(atoi(vals[i].c_str()));
+			TreeNode* cur_node = queue.front();
+			if (is_left_child)
+			{
+				cur_node->left = n;
+			}
+			else{
+				cur_node->right = n;
+			}
+			queue.push(n);
+		}
+
+		if (!is_left_child)
+		{
+			queue.pop();
+		}
+
+		is_left_child = !is_left_child;
+	}
+
+	return root;
+}
+
+vector<string> split(const string &str, string delim) {
+	vector<string> results;
+	int lastIndex = 0, index;
+	while ((index = str.find(delim, lastIndex)) != string::npos) {
+		results.push_back(str.substr(lastIndex, index - lastIndex));
+		lastIndex = index + delim.length();
+	}
+
+	if (lastIndex != str.length()) {
+		results.push_back(str.substr(lastIndex, str.length() - lastIndex));
+	}
+
+	return results;
 }

@@ -29,7 +29,11 @@ public:
 
     bool isValidBST(TreeNode *root);
 
-    bool isValidBST(TreeNode *root, int *low, int *high);
+    bool isValidBST(TreeNode *root, long low, long high);
+
+	bool isBalanced(TreeNode *root);
+
+	int balancedHelper(TreeNode *root);
 
     int numTrees(int n);
 
@@ -38,6 +42,14 @@ public:
     vector<TreeNode*> generateTrees(int left, int right);
 
     vector<string> binaryTreePaths(TreeNode * root);
+
+	// Encodes a tree to a single string.
+	string serialize(TreeNode* root);
+
+	// Decodes your encoded data to tree.
+	TreeNode* deserialize(string data);
 };
+
+static vector<string> split(const string &str, string delim);
 
 #endif //CPPRACTICE_TREE_MANAGER_H

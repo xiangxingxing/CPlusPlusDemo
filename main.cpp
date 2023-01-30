@@ -18,6 +18,7 @@
 #include "map"
 //#include "json/json.h"
 #include "my_algrithm/sort/quick_sorter.h"
+#include "my_algrithm/sort/merge_sorter.h"
 #include "model/my_complex.h"
 
 using namespace std;
@@ -64,6 +65,7 @@ static vector<int> integers_;
 static vector<Student *> students_;
 
 static void QuickSortDemo();
+static void MergeSortDemo();
 static void MyComplexDemo();
 
 static void LambdaExpression();
@@ -115,13 +117,15 @@ int main() {
 
 	//QuickSortDemo();
 
+	MergeSortDemo();
+
 	//MyComplexDemo();
 
 	//LambdaExpression();
 
 	//LambdaExpression2();
 
-	StdIterator();
+	//StdIterator();
 
 //	auto person = SharedPointTest();
 //	person->ShowInfo();
@@ -695,6 +699,17 @@ void QuickSortDemo()
 //	QuickSorter::QuickSortLomuto(v, 0, v.size() - 1);
 //	QuickSorter::QuickSortHoare(v, 0, v.size() - 1);
 	QuickSorter::QuickSortBook(v, 0, v.size() - 1);
+	for (const auto& item: v)
+	{
+		cout << item << " ";
+	}
+}
+
+void MergeSortDemo()
+{
+	vector<int> v = { -1, 0, 3, 8, 2, 5, 1, 27, 10, 14, 9, 8, 26 };
+	MergeSorter::Sort(v);
+
 	for (const auto& item: v)
 	{
 		cout << item << " ";
