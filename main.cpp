@@ -21,6 +21,9 @@
 #include "my_algrithm/sort/merge_sorter.h"
 #include "model/my_complex.h"
 
+#include <queue>
+#include <unordered_map>
+#include <set>
 using namespace std;
 
 static void GetSetDemo();
@@ -41,7 +44,9 @@ static void VectorDemo2();
 const vector<int>& VectorDemo3();
 vector<Student *>& VectorDemo4();
 static void StringDemo1();
-static void MapDemo();
+static void OrderedMapDemo();
+static void UnOrderedMapDemo();
+static void SetDemo();
 static int JsonDemo();
 
 static void PointRefDemo1();
@@ -61,6 +66,8 @@ void Print_Map(const map<int, int>& map1);
 static void OperatorDemo();
 static void SwapDemo(float * f1, float * f2);
 
+static void InputDemo();
+
 static vector<int> integers_;
 static vector<Student *> students_;
 
@@ -72,6 +79,7 @@ static void LambdaExpression();
 static void LambdaExpression2();
 
 static void StdIterator();
+static void PriorityQueue();
 
 int main() {
     //out_put::BasicUserInputDemo();
@@ -102,7 +110,7 @@ int main() {
     //StdManager::PlayerDemo();
     //StdManager::SetSortDemo();
 
-    //MapDemo();
+	//OrderedMapDemo();
     //return JsonDemo();
 
     //PointRefDemo1();
@@ -117,7 +125,7 @@ int main() {
 
 	//QuickSortDemo();
 
-	MergeSortDemo();
+	//MergeSortDemo();
 
 	//MyComplexDemo();
 
@@ -126,6 +134,14 @@ int main() {
 	//LambdaExpression2();
 
 	//StdIterator();
+
+	//PriorityQueue();
+
+	//InputDemo();
+
+	//UnOrderedMapDemo();
+
+	SetDemo();
 
 //	auto person = SharedPointTest();
 //	person->ShowInfo();
@@ -521,15 +537,17 @@ void StringDemo1(){
     StdManager::VectorFuncDemo();
 }
 
-void MapDemo(){
+void OrderedMapDemo(){
     map<int, int> m;
     //插入方式
     //第一种
-    m.insert(pair<int, int>(1, 10));
+    m.insert(pair<int, int>(4, 44));
     //第二种
-    m.insert(make_pair(2, 20));
+    m.insert(make_pair(3, 33));
     //第三种
-    m.insert(map<int, int>::value_type(3, 30));
+    m.insert(map<int, int>::value_type(2, 22));
+	//第四种
+	m[10] = 100;
     Print_Map(m);
 
     //删除
@@ -542,12 +560,74 @@ void MapDemo(){
     }else{
         cout << "未找到元素" << endl;
     }
+
+	map<int, std::string> orderedMap;
+	orderedMap[5] = "five";
+	orderedMap[3] = "three";
+	orderedMap[8] = "eight";
+	orderedMap[1] = "one";
+	//1.有序查询
+	for(auto it = orderedMap.begin(); it != orderedMap.end(); it++){
+		std::cout << it->first << " : " << it->second << std::endl;
+	}
+
+	for(auto& pair : orderedMap){
+		std::cout << pair.first << " : " << pair.second << std::endl;
+	}
+
+	//2.范围查询  查找所有键在 [2, 6] 之间的键值对
+	auto start = orderedMap.lower_bound(2);
+	auto end = orderedMap.upper_bound(6);
+	for (auto it = start; it != end; ++it) {
+		std::cout << it->first << ": " << it->second << std::endl;
+	}
+
+	//3.最大最小值
+	std::cout << "\nSmallest key: " << orderedMap.begin()->first;
+	std::cout << "\nLargest key: " << orderedMap.rbegin()->first << std::endl;
 }
 
 void Print_Map(const map<int, int>& m){
     for(auto & it : m){
         cout << "key = " << it.first <<", val = " << it.second << endl;
     }
+}
+
+void UnOrderedMapDemo(){
+	std::unordered_map<int, std::string> map = {{ 1, "one" },
+												{ 2, "two" },
+												{ 3, "three" }};
+	if(map.count(3)){
+		std::cout << "map.count(3) = " << map.count(3) << ", map[3] = " << map[3] << std::endl;
+	}
+
+	map[3] = "三";
+	std::cout << "After modification, map[3] = " << map[3] << std::endl;
+}
+
+void SetDemo(){
+	std::set<std::string> strSet;
+	strSet.insert("google");
+	strSet.insert("apple");
+	strSet.insert("byte");
+	if(strSet.count("apple")){
+		std::cout << "apple exits in strSet" << std::endl;
+	}
+
+	if(!strSet.count("banana")){
+		std::cout << "banana doesn't exit in strSet" << std::endl;
+	}
+
+	if(strSet.find("byte") != strSet.end()){
+		std::cout << "byte exits in strSet" << std::endl;
+	}
+
+	for(auto iter = std::next(strSet.begin()); iter != strSet.end(); iter++){
+		if((*iter) == "byte"){
+			std::cout << "get byte" << std::endl;
+			std::cout << "get prev " << (*std::prev(iter)) << std::endl;
+		}
+	}
 }
 
 static int JsonDemo(){
@@ -693,6 +773,27 @@ void SwapDemo(float * f1, float * f2){
     *f2 = temp;
 }
 
+void InputDemo(){
+	cout << "<start read strings from input>" << endl;
+	int n;
+	std::vector<std::string> input;
+	while(cin >> n){
+		std::string str;
+		for(int i = 0; i < n; i++){
+			cin >> str;
+			input.push_back(str);
+		}
+
+		int idx = 0;
+		for(auto& s : input){
+			std::cout << idx << ":" << s <<endl;
+			idx++;
+		}
+	}
+
+	cout << "<end read n strings>" << endl;
+}
+
 void QuickSortDemo()
 {
 	vector<int> v = { -1, 0, 3, 8, 2, 5, 1, 27, 10, 14, 9, 8, 26 };
@@ -821,4 +922,16 @@ void StdIterator()
 
 	auto res = in_order == reverse_order;
 	cout << "in_order == reverse_order : " << (res ? "true" : "false");
+}
+
+void PriorityQueue(){
+	std::priority_queue<Student, std::vector<Student>, CompareAge> pq;
+	pq.emplace("a", 42, 90);
+	pq.emplace("b", 19, 89);
+	pq.emplace("c", 30, 44);
+
+	while(!pq.empty()){
+		std::cout << pq.top().GetName() << " - " << pq.top().GetAge() << std::endl;
+		pq.pop();
+	}
 }

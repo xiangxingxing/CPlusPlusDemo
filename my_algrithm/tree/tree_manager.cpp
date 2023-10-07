@@ -115,6 +115,41 @@ vector<vector<int>> TreeManager::levelOrder(TreeNode *root) {
     return vec;
 }
 
+vector<vector<int>> TreeManager::levelOrder2(TreeNode *root) {
+	vector<vector<int>> result;
+	if(root == nullptr){
+		return result;
+	}
+
+	TreeNode* p = root;
+	std::queue<TreeNode*> queue;
+	queue.push(p);
+	while(!queue.empty()){
+		int size = queue.size();
+		vector<int> temp;
+		while(size > 0){
+			TreeNode* node = queue.front();
+			queue.pop();
+			if(node->left != nullptr){
+				queue.push(node->left);
+			}
+			if(node->right != nullptr){
+				queue.push(node->right);
+			}
+
+			temp.push_back(node->val);
+			size--;
+		}
+
+		result.push_back(temp);
+	}
+
+	reverse(result.begin(), result.end());
+
+	return result;
+}
+
+
 TreeNode *TreeManager::deleteNodeInBst(TreeNode *root, int key) {
     if (root == nullptr) {
         return nullptr;
@@ -271,6 +306,51 @@ vector<TreeNode*> TreeManager::generateTrees(int start, int end){
     }
 
     return ans;
+}
+
+/*
+ * 94 · 二叉树中的最大路径和
+ * */
+int TreeManager::maxPathSum(TreeNode *root){
+	maxPathSumHelper(root);
+	return maxValue;
+}
+
+int TreeManager::maxPathSumHelper(TreeNode* root){
+	if(root == nullptr){
+		return 0;
+	}
+
+	int left = maxPathSumHelper(root->left);
+	int right = maxPathSumHelper(root->right);
+	int sum = std::max(root->val, std::max(root->val + left, root->val + right));
+	maxValue = std::max(maxValue, std::max(sum, root->val + left + right));
+	return sum;
+}
+
+TreeNode* TreeManager::buildTree(vector<int> &preorder, vector<int> &inorder){
+	int index = 0;
+	for(auto val : inorder){
+		inorderMap[val] = index++;
+	}
+
+	return buildTreeHelper(preorder, inorder, 0, inorder.size() - 1);
+}
+
+TreeNode* TreeManager::buildTreeHelper(vector<int> &preorder, vector<int> &inorder, int inLeft, int inRight){
+	if(inLeft > inRight){
+		return nullptr;
+	}
+
+	int rootValue = preorder[preIndex];
+	auto* root = new TreeNode(rootValue);
+
+	int inIdx = inorderMap[rootValue];
+	preIndex++;
+
+	root->left = buildTreeHelper(preorder, inorder, inLeft, inIdx - 1);
+	root->right = buildTreeHelper(preorder, inorder, inIdx + 1, inRight);
+	return root;
 }
 
 //https://www.lintcode.com/problem/480/

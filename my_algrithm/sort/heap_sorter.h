@@ -61,7 +61,7 @@ void HeapSorter::HeapAdjust(vector<T>& array, int index, int last_index)
 	if (largest != cur)
 	{
 		SwapAt(array, cur, largest);
-		HeapAdjust(array, largest, last_index)
+		HeapAdjust(array, largest, last_index);
 	}
 }
 

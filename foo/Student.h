@@ -34,4 +34,10 @@ private:
     float m_score_;
 };
 
+struct CompareAge{
+	bool operator()(const Student& s1, const Student& s2){
+		return s1.GetAge() > s2.GetAge();//最小堆
+	}
+};
+
 #endif //CPPRACTICE_STUDENT_H

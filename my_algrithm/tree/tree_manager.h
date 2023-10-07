@@ -5,6 +5,8 @@
 #ifndef CPPRACTICE_TREE_MANAGER_H
 #define CPPRACTICE_TREE_MANAGER_H
 
+#include <unordered_map>
+
 class TreeManager{
 public:
     vector<int> preorderTraversal(TreeNode *root);
@@ -14,6 +16,8 @@ public:
     vector<int> postorderTraversal(TreeNode *root);
 
     vector<vector<int>> levelOrder(TreeNode *root);
+
+    vector<vector<int>> levelOrder2(TreeNode *root);
 
     TreeNode *deleteNodeInBst(TreeNode *root, int key);
 
@@ -40,6 +44,18 @@ public:
     vector<TreeNode*> generateTrees(int n);
 
     vector<TreeNode*> generateTrees(int left, int right);
+
+	int maxPathSum(TreeNode *root);
+	int maxValue = INT_MIN;
+	int maxPathSumHelper(TreeNode* root);
+
+	/*
+	 * 73 · 前序遍历和中序遍历树构造二叉树
+	 * */
+	unordered_map<int, int> inorderMap;
+	int preIndex = 0;
+	TreeNode* buildTree(vector<int> &preorder, vector<int> &inorder);
+	TreeNode* buildTreeHelper(vector<int> &preorder, vector<int> &inorder, int inLeft, int inRight);
 
     vector<string> binaryTreePaths(TreeNode * root);
 
