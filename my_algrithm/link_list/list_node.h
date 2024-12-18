@@ -9,10 +9,12 @@ class ListNode{
 public:
     int val;
     ListNode * next;
-    ListNode(int val) {
+    explicit ListNode(int val) {
         this->val = val;
         this->next = nullptr;
     }
+
+	ListNode(int x, ListNode* node) : val(x), next(node){}
 };
 
 #endif //CPPRACTICE_LISTNODE_H

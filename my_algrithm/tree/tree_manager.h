@@ -46,7 +46,7 @@ public:
     vector<TreeNode*> generateTrees(int left, int right);
 
 	int maxPathSum(TreeNode *root);
-	int maxValue = INT_MIN;
+
 	int maxPathSumHelper(TreeNode* root);
 
 	/*

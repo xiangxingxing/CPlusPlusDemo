@@ -11,5 +11,7 @@ set(MY_SOURCES
         my_algrithm/lint_code_manager.h
         my_algrithm/lint_code_manager.cpp
         my_algrithm/singleton.h
+        my_algrithm/2024_MS_review.h
+        my_algrithm/2024_MS_review.cpp
         PARENT_SCOPE
         )

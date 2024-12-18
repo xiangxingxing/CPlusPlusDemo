@@ -311,6 +311,8 @@ vector<TreeNode*> TreeManager::generateTrees(int start, int end){
 /*
  * 94 · 二叉树中的最大路径和
  * */
+int maxValue = INT_MIN;
+
 int TreeManager::maxPathSum(TreeNode *root){
 	maxPathSumHelper(root);
 	return maxValue;

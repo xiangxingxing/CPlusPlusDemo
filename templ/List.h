@@ -14,7 +14,7 @@ private:
     T *ptr;
 
 public:
-    List(int s = 0);//s表示数组元素个数
+    explicit List(int s = 0);//s表示数组元素个数
     List(List & another);
     ~List();
     void push_bask(const T &v);
