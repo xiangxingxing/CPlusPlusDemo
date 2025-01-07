@@ -6,6 +6,18 @@
 #include <map>
 using namespace std;
 
+/*
+ * 适用场景建议
+	单链表（带 keyToPrev）适用场景：
+
+	内存敏感的场景：如果 LRU 缓存的容量较大，单链表的空间开销较低。
+	简单实现的需求：实现方式相对简单，使用哈希表和单链表即可完成。
+	双链表适用场景：
+
+	高性能需求：双链表更加灵活，维护链表结构更简洁直接。
+	内存不是瓶颈：如果 LRU 缓存容量不大，双链表额外的指针开销可以忽略
+ * */
+
 LRUCache::LRUCache(int capacity) {
     capacity_ = capacity;
     size_ = 0;
@@ -32,7 +44,7 @@ void LRUCache::put(int key, int value) {
 
     if (size_ < capacity_){
         DLinkedNode* new_node = new DLinkedNode(key, value);
-        new_node->next_ = nullptr;
+//        new_node->next_ = nullptr;
         tail_->next_ = new_node;
         key_to_pre_[key] = tail_;
         tail_ = new_node;

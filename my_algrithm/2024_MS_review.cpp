@@ -31,6 +31,305 @@ vector<int> MS::twoSum(vector<int>& nums, int target){
 	return result;
 }
 
+//3. Longest Substring Without Repeating Characters
+int MS::lengthOfLongestSubstring(string s){
+	int n = s.size();
+	int longest = 0;
+	int left = 0;
+	unordered_map<char, int> char_map;// 哈希表用于记录字符的最近位置
+	for (int right = 0; right < n; ++right)
+	{
+		// 如果当前字符在哈希表中已存在，并且它的位置大于等于左边界
+		if(char_map.count(s[right]) && char_map[s[right]] >= left){
+			left = char_map[s[right]] + 1;
+		}
+		char_map[s[right]] = right;
+		longest = std::max(longest, right - left + 1);
+	}
+
+	return longest;
+}
+
+//7. Reverse Integer
+int MS::reverseInteger(int x){
+	int res = 0;
+	while(x != 0){
+		if(res > INT_MAX / 10 || (res == INT_MAX / 10 && x % 10 > INT_MAX % 10)){
+			return 0;
+		}
+
+		if(res < INT_MIN / 10 || (res == INT_MIN / 10 && x % 10 < INT_MIN % 10))
+		{
+			return 0;
+		}
+		res = res * 10 + x % 10;
+		x /= 10;
+	}
+
+	return res;
+}
+
+//31.Next permutation
+void MS::nextPermutation(vector<int>& nums){
+	int n = nums.size();
+	int i = n - 2;
+	while(i >= 0 && nums[i] >= nums[i + 1]){ //找到满足 nums[i] < nums[i + 1] 的最大索引 i
+		i--;
+	}
+	if(i >= 0){
+		int j = n - 1;
+		while(j >= 0 && nums[j] <= nums[i]){ //从后往前找到第一个大于 nums[i] 的元素
+			j--;
+		}
+		swap(nums[i], nums[j]);
+	}
+
+	std::reverse(nums.begin() + i + 1, nums.end());
+}
+
+//46.Permutations
+/*
+ * 时间复杂度:O(n·n!)
+ * 空间复杂度：O(n·n!)：因为
+ * */
+vector<vector<int>> MS::permute(vector<int>& nums) {
+	if(nums.empty()){
+		return {};
+	}
+
+	vector<vector<int>> result;
+	vector<bool> visited(nums.size(), false);
+	vector<int> temp;
+	permute_dfs(nums, visited, temp, result);
+	return result;
+}
+
+void MS::permute_dfs(vector<int>& nums, vector<bool>& visited, vector<int>& temp, vector<vector<int>>& result){
+	if(nums.size() == temp.size()){
+		result.push_back(temp);
+		return;
+	}
+
+	for(int i = 0; i < nums.size(); i++){
+		if(visited[i]){
+			continue;
+		}
+
+		visited[i] = true;
+		temp.push_back(nums[i]);
+		permute_dfs(nums, visited, temp, result);
+		temp.pop_back();
+		visited[i] = false;
+	}
+}
+
+vector<vector<int>> MS::permuteUnique(vector<int>& nums) {
+	if(nums.empty()){
+		return {};
+	}
+	std::sort(nums.begin(), nums.end());
+
+	vector<vector<int>> result;
+	vector<bool> visited(nums.size(), false);
+	vector<int> temp;
+	permuteUnique_dfs(nums, visited, temp, result);
+	return result;
+}
+
+void MS::permuteUnique_dfs(vector<int>& nums, vector<bool>& visited, vector<int>& temp, vector<vector<int>>& result){
+	if(nums.size() == temp.size()){
+		result.push_back(temp);
+		return;
+	}
+
+	for(int i = 0; i < nums.size(); i++){
+		if(i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]){
+			continue;
+		}
+
+		if(visited[i]){
+			continue;
+		}
+
+		visited[i] = true;
+		temp.push_back(nums[i]);
+		permuteUnique_dfs(nums, visited, temp, result);
+		temp.pop_back();
+		visited[i] = false;
+	}
+}
+
+//56.Merge Intervals 合并区间
+/*
+ * Time：O(nlogn)
+ * Space：O(n)
+ * */
+vector<vector<int>> MS::mergeIntervals(vector<vector<int>>& intervals){
+	if(intervals.empty()){
+		return intervals;
+	}
+
+	std::sort(intervals.begin(),
+			intervals.end(),
+			[](vector<int>& a, vector<int>& b){
+				return a[0] < b[0];
+			});
+
+	vector<vector<int>> result;
+	result.push_back(intervals[0]);
+	int n = intervals.size();
+	for (int i = 1; i < n; ++i)
+	{
+		vector<int>& current = intervals[i];//❗️必须返回的是vector<int>&
+		vector<int>& last = result.back();
+		if(current.front() <= last.back()){
+			// 更新合并区间的结束位置
+			last.back() = std::max(last.back(), current.back());
+		}
+		else{
+			//没有重叠，添加分区
+			result.push_back(current);
+		}
+	}
+
+	return result;
+}
+
+//70.Climbing Stairs
+// Time：O(n)
+// Space:O(1)
+int MS::climbStairs(int n){
+	if (n <= 2) return n; // 边界情况
+
+	int prev1 = 2; // 表示 dp[i-1]
+	int prev2 = 1; // 表示 dp[i-2]
+
+	for (int i = 3; i <= n; ++i) {
+		int current = prev1 + prev2; // 当前的 dp[i]
+		prev2 = prev1; // 更新 dp[i-2]
+		prev1 = current; // 更新 dp[i-1]
+	}
+
+	return prev1;
+}
+
+//746. Min Cost Climbing Stairs
+int MS::minCostClimbingStairs(vector<int>& cost){
+	if(cost.empty()) return 0;
+	int n = cost.size();
+	/*
+	 * Time:O(n) Space:O(1)
+	 * */
+	if(n == 0) return 0;
+	if(n == 1) return cost[0];
+	int prev1 = 0;
+	int prev2 = 0;
+	for(int i = 2; i <= n; i++){
+		int cur = std::min(prev1 + cost[i - 1], prev2 + cost[i - 2]);
+		prev2 = prev1;
+		prev1 = cur;
+	}
+
+	return prev1;
+
+	/*
+	 * dp实现，Time: O(2xn) Space:O(n)
+	 * */
+//	int sum = 0;
+//	vector<int> dp(n + 1);//dp[i]表示cost[i]处的最小cost, return min(dp[n - 1], dp[n - 2]);
+//	dp[0] = 0;
+//	dp[1] = cost[0];
+//	for (int i = 2; i <= n; ++i)
+//	{
+//		dp[i] = INT_MAX;
+//		for (int j = 1; j <= 2; ++j)
+//		{
+//			dp[i] = std::min(dp[i], dp[i - j]);
+//		}
+//		dp[i] += cost[i - 1];
+//	}
+//
+//	return std::min(dp[n], dp[n - 1]);
+}
+
+//322. Coin Change
+/*
+ * 状态定义：dp[i]表示凑成金额i的最少硬币数
+ * 状态转移方程: dp[i] = min(dp[i], dp[i - coin] + 1) | i >= coin 且 dp[i - coin]不为INT_MAX 时
+ * 初始化条件：dp[0] = 0,其他值初始化为正无穷
+ * 返回结果: INT_MAX ? -1 : dp[amount]
+ *
+ * Time: O(amount * coin.size()) Space: O(amount)
+ * */
+int MS::coinChange(vector<int>& coins, int amount){
+	vector<int> dp(amount + 1, INT_MAX);
+	dp[0] = 0;
+	for (int i = 1; i <= amount; ++i)
+	{
+		for (const auto& coin: coins){
+			if(i >= coin && dp[i - coin] != INT_MAX){
+				dp[i] = std::min(dp[i], dp[i - coin] + 1);
+			}
+		}
+	}
+
+	return dp[amount] == INT_MAX ? -1 : dp[amount];
+}
+
+//344.Reverse String
+void MS::reverseString(vector<char>& s){
+	int left = 0;
+	int right = s.size() - 1;
+	while(left < right){
+		swap(s[left], s[right]);
+		left++;
+		right--;
+	}
+}
+
+//905. Sort Array By Parity (偶 + 奇 -> 双指针)
+vector<int> MS::sortArrayByParity(vector<int>& nums){
+	int left = 0;
+	int right = nums.size() - 1;
+	while(left < right){
+		if(nums[left] % 2 > nums[right] % 2){
+			swap(nums[left], nums[right]);
+		}
+
+		if(nums[left] % 2 == 0) left++;
+		if(nums[right] % 2 == 1) right--;
+	}
+
+	return nums;
+}
+
+//region Stack and Queue
+
+//20. Valid Parentheses 有效括号
+bool MS::isValidParentheses(string s){
+	if(s.empty()) return true;
+	stack<char> sk;
+	for(auto& ch : s){
+		if(ch == ')' || ch == ']' || ch == '}'){
+			if(sk.empty()
+			   || (ch == ')' && sk.top() != '(')
+			   || (ch == ']' && sk.top() != '[')
+			   || (ch == '}' && sk.top() != '{')){
+				return false;
+			}
+			sk.pop();
+		}
+		else{
+			sk.push(ch);
+		}
+	}
+
+	return sk.empty();
+}
+
+//endregion
+
+
 //region Binary Search
 /*
  * LeetCode 704: Binary Search
@@ -139,6 +438,59 @@ int MS::binarySearchRotated(vector<int>& nums, int target)
 
 //region Tree
 
+/*
+ * 95. Unique Binary Search Trees II
+ *
+ * Time: 生成所有可能的二叉搜索树需要遍历所有可能的组合，时间复杂度接近 O(4^n / sqrt(n))
+ * Space: 树的递归生成和存储需要 O(4^n / sqrt(n))
+ * */
+
+vector<TreeNode*> MS::generateTrees(int n){
+	if(n == 0) return {};
+	return generateTreesHelper(1, n);
+}
+
+vector<TreeNode*> MS::generateTreesHelper(int start, int end){
+	if(start > end) return { nullptr };
+	vector<TreeNode*> result;
+	for(int i = start; i <= end; i++){
+		vector<TreeNode*> leftTrees = generateTreesHelper(start, i - 1);
+		vector<TreeNode*> rightTrees = generateTreesHelper(i + 1, end);
+		for (auto l: leftTrees)
+		{
+			for (auto r: rightTrees)
+			{
+				TreeNode* root = new TreeNode(i);
+				root->left = l;
+				root->right = r;
+				result.push_back(root);
+			}
+		}
+	}
+
+	return result;
+}
+
+/*
+ * 96: Unique Binary Search Trees
+ * 定义 dp[i] 表示 i 个节点能构成的不同二叉搜索树的个数
+ * 对于每个数 j（1 ≤ j ≤ i），将其作为根节点：
+		左子树有 j-1 个节点，右子树有 i-j 个节点。
+		总数为 dp[j-1] * dp[i-j]。
+ * */
+int MS::numTrees(int n){
+	vector<int> dp(n + 1);//dp[i] 表示 i 个节点能构成的不同二叉搜索树的个数
+	dp[0] = 1;
+	for(int i = 1; i <= n; i++){
+		for (int j = 1; j <= i; ++j)
+		{
+			dp[i] += dp[j - 1] * dp[i - j];
+		}
+	}
+
+	return dp[n];
+}
+
 //98. Validate Binary Search Tree
 // 时间复杂度 O(n),n为树中的节点数量
 // 空间复杂度 O(h),h为树的高度：平衡的二叉树，高度为O(log n)，非平衡二叉树，最坏下为链状树，高度为O(n)
@@ -177,6 +529,164 @@ void MS::inorder(TreeNode* node){
 	}
 	prev = node;
 	inorder(node->right);
+}
+
+/*
+ * 105.Construct Binary Tree from Preorder and Inorder Traversal
+ * Time:O(n)
+ * Space:
+ * 	平均情况下（平衡二叉树），递归深度为 O(log n)
+ * 	最坏情况下（树退化为链表），递归深度为 O(n)。
+ *  存储中序遍历的 n 个元素，空间复杂度为 O(n)
+ * */
+TreeNode* MS::buildTree(vector<int>& preorder, vector<int>& inorder) {
+	unordered_map<int, int> inOrderMap;
+	for(int i = 0; i < inorder.size(); i++){
+		inOrderMap[inorder[i]] = i;
+	}
+	int preIndex = 0;
+	return buildTreeHelper(preorder, inorder, inOrderMap, preIndex, 0, inorder.size() - 1);
+}
+
+TreeNode* MS::buildTreeHelper(vector<int>& preorder, vector<int>& inorder, unordered_map<int, int>& inOrderMap, int& preIndex, int inLeft, int inRight){
+	if(inLeft > inRight){
+		return nullptr;
+	}
+	int val = preorder[preIndex];
+	preIndex++;
+	TreeNode* root = new TreeNode(val);
+	int inIndex = inOrderMap[val];
+	root->left = buildTreeHelper(preorder, inorder, inOrderMap, preIndex, inLeft, inIndex - 1);
+	root->right = buildTreeHelper(preorder, inorder, inOrderMap, preIndex, inIndex + 1, inRight);
+	return root;
+}
+
+/*
+ * 109. Convert Sorted List to Binary Search Tree
+ *	 Given the head of a singly linked list where elements are sorted in ascending order, convert it to a
+ * 	height-balanced binary search tree.
+
+ * Time: O(n)
+ * Space: O(n)
+ * */
+TreeNode* MS::sortedListToBST(ListNode* head){
+	if(!head) return nullptr;
+	vector<int> nums = ListNodeToArray(head);
+	return buildBST(nums, 0, nums.size() - 1);
+}
+
+vector<int> MS::ListNodeToArray(ListNode* head){
+	vector<int> result;
+	ListNode* cur = head;
+	while(cur){
+		result.push_back(cur->val);
+		cur = cur->next;
+	}
+
+	return result;
+}
+
+TreeNode* MS::buildBST(vector<int>& nums, int start, int end){
+	if(start > end){
+		return nullptr;
+	}
+	int mid = start + (end - start) / 2;
+	TreeNode* root = new TreeNode(nums[mid]);
+
+	root->left = buildBST(nums, start, mid - 1);
+	root->right = buildBST(nums, mid + 1, end);
+
+	return root;
+}
+
+/*
+ * 110. Balanced Binary Tree
+ * Time:O(n)：每个节点只访问一次
+ * Space:
+ * 	O(h)：递归调用栈的深度为树的高度 h;
+ * 	最坏情况下（链表状树）：O(n)
+ * 	平衡二叉树：O(log n)
+ * */
+bool MS::isBalanced(TreeNode* root){
+	return isBalancedHelper(root) != NOT_BALANCED;
+}
+
+int MS::isBalancedHelper(TreeNode* root){
+	if (!root) return 0;
+
+	int left = isBalancedHelper(root->left);
+	int right = isBalancedHelper(root->right);
+
+	if (left == NOT_BALANCED || right == NOT_BALANCED || abs(left - right) > 1) {
+		return NOT_BALANCED;
+	}
+
+	return max(left, right) + 1;
+}
+
+/*
+ * 112.Path Sum
+ * Time:O(n)：每个节点只访问一次
+ * Space:
+ * 		最坏情况下（完全不平衡树）：O(n)
+ * 		最好情况下（完全平衡树）：O(log n)
+ * */
+bool MS::hasPathSum(TreeNode* root, int targetSum){
+	if(!root) return false;
+	if(!root->left && !root->right && root->val == targetSum) return true;
+	return hasPathSum(root->left, targetSum - root->val) ||
+		   hasPathSum(root->right, targetSum - root->val);
+}
+
+/*
+ * 113. Path Sum II
+ * 思路：dfs + 回溯
+ * Time: O(n)
+ * Space:O(h + n)
+ * */
+vector<vector<int>> MS::pathSum(TreeNode* root, int targetSum){
+	vector<vector<int>> result;
+	vector<int> temp;
+	pathSumDFS(root, targetSum, temp, result);
+	return result;
+}
+
+void MS::pathSumDFS(TreeNode* root, int targetSum, vector<int>& path, vector<vector<int>>& result){
+	if(!root){
+		return;
+	}
+	path.push_back(root->val);
+
+	if(!root->left && !root->right && root->val == targetSum){
+		result.push_back(path);
+	}
+
+	pathSumDFS(root->left, targetSum - root->val, path, result);
+	pathSumDFS(root->right, targetSum - root->val, path, result);
+	path.pop_back();
+}
+
+
+/*
+ * 114. Flatten Binary Tree to Linked List
+ * Time:O(n)
+ * Space:最坏O(h), h为树的高度
+ * */
+void MS::flatten(TreeNode* root){
+	if(!root) return;
+
+	flatten(root->left);
+	flatten(root->right);
+
+	TreeNode* temp = root->right;
+	root->right = root->left;
+	root->left = nullptr;
+
+	TreeNode* cur = root;
+	while(cur->right){
+		cur = cur->right;
+	}
+	cur->right = temp;
 }
 
 //145. Binary Tree Postorder Traversal
@@ -231,6 +741,26 @@ TreeNode* MS::lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q){
 	}
 
 	return left ? left : right;
+}
+
+/*
+	 * 285. 二叉搜索树中的中序后继
+	 * 给定一棵二叉搜索树和其中的一个节点 p，找到该节点在树中的中序后继。
+	 * 如果节点没有中序后继，请返回 null。 节点 p 的后继是值比 p.val 大的节点中键值最小的节点
+	 * */
+TreeNode* MS::inorderSuccessor(TreeNode* root, TreeNode* p){
+	TreeNode* successor = nullptr;
+	while (root){
+		if(p->val < root->val){
+			successor = root;
+			root = root->left;
+		}
+		else{
+			root = root->right;
+		}
+	}
+
+	return successor;
 }
 
 //450. Delete Node in a BST
@@ -550,6 +1080,39 @@ ListNode* MS::detectCycle(ListNode *head){
 	return nullptr;
 }
 
+//143. Reorder List
+void MS::reorderList(ListNode* head){
+	if(!head || !head->next) return;
+	ListNode* p = head;
+	ListNode* q = reverseList(partitionList(p));
+	while(p && q){
+		ListNode* pNext = p->next;
+		p->next = q;
+		ListNode* qNext = q->next;
+
+		p = pNext;
+		if(p){
+			q->next = p;
+		}
+
+		q = qNext;
+	}
+}
+
+ListNode* MS::partitionList(ListNode* head){
+	if(!head || !head->next) return head;
+	ListNode* slow = head;
+	ListNode* fast = head->next->next;
+	while(fast && fast->next){
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	ListNode* next = slow->next;
+	slow->next = nullptr;
+
+	return next;
+}
+
 //148. Sort List
 ListNode* MS::sortList(ListNode* head){
 	if(!head || !head->next) return head;
@@ -723,7 +1286,7 @@ int MS::trap(vector<int>& height){
 	return result;
 }
 
-//55. JumpGame
+//55. JumpGame O(n2)
 bool MS::canJump(vector<int>& nums){
 	int n = nums.size();
 	vector<bool> dp(n, false);// dp[i] 表示是否可以到达位置 i
@@ -740,6 +1303,24 @@ bool MS::canJump(vector<int>& nums){
 		}
 	}
 	return dp[n - 1];
+}
+
+bool MS::canJump_Greed(vector<int>& nums){
+	int farthest = 0;// 当前能到达的最远位置
+	int n = nums.size();
+	for (int i = 0; i < n; ++i)
+	{
+		if(i > farthest){
+			return false;// 如果当前索引超出了能到达的范围
+		}
+
+		farthest = std::max(farthest, i + nums[i]);//更新最远可到达位置
+		if(farthest >= n - 1){
+			return true;// 如果能到达最后一个位置
+		}
+	}
+
+	return true;
 }
 
 //45. JumpGame II
@@ -771,6 +1352,26 @@ int MS::maxSubArray(vector<int>& nums){
 	}
 
 	return max;
+}
+
+/*
+ * 给定一个整数数组，找到一个具有最大和的子数组，返回其最大和。
+ * 每个子数组的数字在数组中的位置应该是连续的。
+ * */
+int MS::maxSubArray_Dp(vector<int>& nums){
+	int n = nums.size();
+	vector<int> dp(n + 1);//dp[n]表示第n个数结尾时，最大和
+	dp[0] = 0;
+	int ans = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		dp[i] = dp[i - 1] > 0
+				? dp[i - 1] + nums[i - 1]
+				: nums[i - 1];
+		ans = std::max(ans, dp[i]);
+	}
+
+	return ans;
 }
 
 
@@ -816,6 +1417,204 @@ int MS::combinationSum4(vector<int>& nums, int target){
 	}
 
 	return dp[target];
+}
+
+
+//200. Number of Islands
+int MS::numIslands(vector<vector<char>>& grid){
+	vector<int> directions = {0, 1, 0, -1, 0};
+	int m = grid.size();
+	if(m == 0) return 0;
+	int n = grid.front().size();
+	int count = 0;
+	for (int i = 0; i < m; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			if(grid[i][j] == '1'){
+				//numIslandsDFS(grid, i, j, directions);
+				numIslandsBFS(grid, i, j, directions);
+				count++;
+			}
+		}
+	}
+
+	return count;
+}
+
+/*
+ * 思路：
+	遍历网格，当发现一个陆地 '1' 时，启动一个深度优先搜索（DFS）。
+	在 DFS 中，将该岛屿的所有陆地（相邻的 '1'）标记为已访问（比如改为 '0'）。
+	每次启动 DFS 时，计数器加 1，表示发现了一个新的岛屿
+ * */
+void MS::numIslandsDFS(vector<vector<char>>& grid, int i, int j, vector<int>& directions){
+	int m = grid.size();
+	int n = grid.front().size();
+	if(i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == '0'){
+		return;
+	}
+	grid[i][j] = '0';
+	for (int k = 0; k < 4; ++k)
+	{
+		int x = i + directions[k];
+		int y = j + directions[k + 1];
+		numIslandsDFS(grid, x, y, directions);
+	}
+}
+
+/*
+ * BFS: Breath-First-Search
+ * 适合图较大，避免递归栈溢出的场景。
+ * 思路：
+	使用队列模拟广度优先搜索（BFS）逐层访问岛屿。
+	每次发现一个新的岛屿，将其所有相邻的陆地 '1' 都标记为 '0'。
+ * */
+void MS::numIslandsBFS(vector<vector<char>>& grid, int i, int j, vector<int>& directions){
+	int m = grid.size();
+	int n = grid.front().size();
+	queue<pair<int, int>> q;
+	q.push({i, j});
+	grid[i][j] = '0';
+	while (!q.empty()){
+		auto [nx, ny] = q.front();
+		q.pop();
+
+		for (int k = 0; k < 4; ++k)
+		{
+			int x = nx + directions[k];
+			int y = ny + directions[k + 1];
+			if(x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == '0'){
+				continue;//🈲️不能直接return，因为还需要接着遍历其他周围点
+			}
+			q.push({x, y});
+			grid[x][y] = '0';
+		}
+	}
+}
+
+//695.Max Area of Island
+/*
+ *  DFS：
+		实现简洁，易于理解。
+		适合栈深度较小的场景。
+	BFS:
+		适合大规模场景：
+		避免递归栈溢出，更适合内存受限的场景。
+
+	对整个 grid 进行遍历，每个格子最多访问一次。
+	时间复杂度：
+		O(R×C)，其中 R 是行数，C 是列数。
+	空间复杂度
+		DFS: 最差情况下（递归深度为岛屿面积），递归栈的空间复杂度为 O(R×C)。
+		BFS: 队列的最大长度为岛屿面积，空间复杂度为 O(R×C)
+ * */
+int MS::maxAreaOfIsland(vector<vector<int>>& grid){
+	int m = grid.size();
+	int n = grid.front().size();
+	int maxArea = 0;
+	//dfs 深度优先搜索
+//	for (int i = 0; i < m; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			if(grid[i][j] == 1){
+//				maxArea = std::max(maxArea, maxAreaOfIslandDFS(grid, i, j));
+//			}
+//		}
+//	}
+
+	//bfs 宽度优先搜索
+	const vector<int> directions = {0, 1, 0, -1, 0};
+	for (int i = 0; i < m; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			if(grid[i][j] == 1){
+				maxArea = std::max(maxArea, maxAreaOfIslandBFS(grid, i, j, directions));
+			}
+		}
+	}
+
+	return maxArea;
+}
+
+int MS::maxAreaOfIslandDFS(vector<vector<int>>& grid, int i, int j, const vector<int>& directions){
+	int m = grid.size();
+	int n = grid.front().size();
+	if(i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == 0){
+		return 0;
+	}
+
+	grid[i][j] = 0;
+	int count = 1;
+	for (int k = 0; k < 4; ++k)
+	{
+		int x = i + directions[k];
+		int y = j + directions[k + 1];
+		count += maxAreaOfIslandDFS(grid, x, y, directions);
+	}
+//	count += maxAreaOfIslandDFS(grid, i - 1, j);
+//	count += maxAreaOfIslandDFS(grid, i + 1, j);
+//	count += maxAreaOfIslandDFS(grid, i, j + 1);
+//	count += maxAreaOfIslandDFS(grid, i, j - 1);
+
+	return count;
+}
+
+int MS::maxAreaOfIslandBFS(vector<vector<int>>& grid, int i, int j, const vector<int>& directions){
+	int m = grid.size();
+	int n = grid.front().size();
+	int area = 0;
+	queue<pair<int, int>> q;
+	q.push({i, j});
+	grid[i][j] = 0;
+	while(!q.empty()){
+		auto [x, y] = q.front();
+		q.pop();
+		area++;
+		for (int k = 0; k < 4; ++k)
+		{
+			int nx = x + directions[k];
+			int ny = y + directions[k + 1];
+			if(nx >= 0 && nx < m && ny >= 0 && ny < n && grid[nx][ny] == 1){
+				q.push({nx, ny});
+				grid[nx][ny] = 0;
+			}
+		}
+	}
+
+	return area;
+}
+
+//1143. Longest Common Subsequence
+/*
+ * Time: O(m * n)
+ * Space: O(m * n)
+ * */
+int MS::longestCommonSubsequence(string text1, string text2){
+	//dp[i][j]表示text1[0...i]中包含text2[0...j]最长公共子序列
+	//转移方程：
+	// 		如果 text1[i-1] == text2[j-1]，则 dp[i][j] = dp[i-1][j-1] + 1
+	//		否则，dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+	int n = text1.size();
+	int m = text2.size();
+	vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+	//dp[i][0]和dp[0][j]均等于0
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			if(text1[i - 1] == text2[j - 1]){
+				dp[i][j] = dp[i - 1][j - 1] + 1;
+			}
+			else{
+				dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
+			}
+		}
+	}
+
+	return dp[n][m];
 }
 
 
@@ -1277,6 +2076,15 @@ void MS::heap_adjust_non_recursive(vector<int>& array, int index, int length){
 //4.提取堆中元素，放入结果数组
 vector<int> MS::topKFrequent(vector<int>& nums, int k){
 	unordered_map<int, int> freq_map;
+	/*
+		 * 如果键 n 已经存在：
+			返回键对应的值的引用（即 freq_map[n]）。
+			对引用执行自增操作（++），会增加对应键的值。
+			如果键 n 不存在：
+			unordered_map 会自动插入一个新的键值对，键为 n，值为默认构造值（对于 int 类型，默认值是 0）。
+			然后返回默认值的引用，再执行自增操作。
+			这使得 freq_map[n]++ 非常方便地处理频率统计问题，而不需要显式地检查键是否存在
+		 * */
 	for(int n : nums){
 		freq_map[n]++;
 	}

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -31,6 +32,48 @@ public:
 	//1. Two Sum
 	vector<int> twoSum(vector<int>& nums, int target);
 
+	//3. Longest Substring Without Repeating Characters
+	int lengthOfLongestSubstring(string s);
+
+	//7. Reverse Integer
+	int reverseInteger(int x);
+
+	//31.Next permutation
+	void nextPermutation(vector<int>& nums);
+
+	//46.Permutations
+	vector<vector<int>> permute(vector<int>& nums);
+	void permute_dfs(vector<int>& nums, vector<bool>& visited, vector<int>& temp, vector<vector<int>>& result);
+
+	//47.Permutations2
+	vector<vector<int>> permuteUnique(vector<int>& nums);
+	void permuteUnique_dfs(vector<int>& nums, vector<bool>& visited, vector<int>& temp, vector<vector<int>>& result);
+
+	//56.Merge Intervals 合并区间
+	vector<vector<int>> mergeIntervals(vector<vector<int>>& intervals);
+
+	//70.Climbing Stairs
+	int climbStairs(int n);
+
+	//746. Min Cost Climbing Stairs
+	int minCostClimbingStairs(vector<int>& cost);
+
+	//322. Coin Change
+	int coinChange(vector<int>& coins, int amount);
+
+	//344.Reverse String
+	void reverseString(vector<char>& s);
+
+	//905. Sort Array By Parity (偶 + 奇)
+	vector<int> sortArrayByParity(vector<int>& nums);
+
+	//region Stack and Queue
+
+	//20. Valid Parentheses 有效括号
+	bool isValidParentheses(string s);
+
+	//endregion
+
 	//region BinarySearch
 
 	int binarySearch(vector<int>& nums, int target);
@@ -43,6 +86,13 @@ public:
 
 	//region Tree
 
+	//95. Unique Binary Search Trees II
+	vector<TreeNode*> generateTrees(int n);
+	vector<TreeNode*> generateTreesHelper(int start, int end);
+
+	//96: Unique Binary Search Trees
+	int numTrees(int n);
+
 	//98. Validate Binary Search Tree
 	bool isValidBST(TreeNode* root);
 	bool isValidBST(TreeNode* root, long low, long high);
@@ -54,6 +104,32 @@ public:
 	void recoverTree(TreeNode* root);
 	void inorder(TreeNode* node);
 
+	//105.Construct Binary Tree from Preorder and Inorder Traversal
+	TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder);
+	TreeNode* buildTreeHelper(vector<int>& preorder, vector<int>& inorder,
+			unordered_map<int, int>& inOrderMap, int& preIndex,
+			int inLeft, int inRight);
+
+	//109. Convert Sorted List to Binary Search Tree
+	TreeNode* sortedListToBST(ListNode* head);
+	vector<int> ListNodeToArray(ListNode* head);
+	TreeNode* buildBST(vector<int>& nums, int start, int end);
+
+	//110. Balanced Binary Tree
+	bool isBalanced(TreeNode* root);
+	int NOT_BALANCED = -1;
+	int isBalancedHelper(TreeNode* root);
+
+	//112.Path Sum
+	bool hasPathSum(TreeNode* root, int targetSum);
+
+	//113. Path Sum II
+	vector<vector<int>> pathSum(TreeNode* root, int targetSum);
+	void pathSumDFS(TreeNode* root, int targetSum, vector<int>& path, vector<vector<int>>& result);
+
+	//114. Flatten Binary Tree to Linked List
+	void flatten(TreeNode* root);
+
 	//145. Binary Tree Postorder Traversal
 	vector<int> postorderTraversal(TreeNode* root);
 
@@ -63,6 +139,12 @@ public:
 	//236. Lowest Common Ancestor of a Binary Tree
 	TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q);
 
+	/*
+	 * 285. 二叉搜索树中的中序后继
+	 * 给定一棵二叉搜索树和其中的一个节点 p，找到该节点在树中的中序后继。
+	 * 如果节点没有中序后继，请返回 null。 节点 p 的后继是值比 p.val 大的节点中键值最小的节点
+	 * */
+	TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p);
 
 	//450. Delete Node in a BST
 	TreeNode* deleteNode(TreeNode* root, int key);
@@ -111,6 +193,10 @@ public:
 	//142. Linked List Cycle II
 	ListNode *detectCycle(ListNode *head);
 
+	//143. Reorder List
+	void reorderList(ListNode* head);
+	ListNode* partitionList(ListNode* head);
+
 	//148. Sort List
 	ListNode* sortList(ListNode* head);
 	ListNode* mergeTwoSorted(ListNode* l1, ListNode* l2);
@@ -146,6 +232,8 @@ public:
 	//55. JumpGame
 	bool canJump(vector<int>& nums);
 
+	bool canJump_Greed(vector<int>& nums);
+
 	//42. Trapping Rain Water
 	int trap(vector<int>& height);
 
@@ -154,6 +242,7 @@ public:
 
 	//53. Maximum Subarray
 	int maxSubArray(vector<int>& nums);
+	int maxSubArray_Dp(vector<int>& nums);
 
 	//62. Unique Paths 【坐标型coordinator type】
 	int uniquePaths(int m, int n);
@@ -175,6 +264,19 @@ public:
 
 	//377. Combination Sum IV
 	int combinationSum4(vector<int>& nums, int target);
+
+	//200. Number of Islands
+	int numIslands(vector<vector<char>>& grid);
+	void numIslandsDFS(vector<vector<char>>& grid, int i, int j, vector<int>& directions);
+	void numIslandsBFS(vector<vector<char>>& grid, int i, int j, vector<int>& directions);
+
+	//695.Max Area of Island
+	int maxAreaOfIsland(vector<vector<int>>& grid);
+	int maxAreaOfIslandDFS(vector<vector<int>>& grid, int i, int j, const vector<int>& directions);
+	int maxAreaOfIslandBFS(vector<vector<int>>& grid, int i, int j, const vector<int>& directions);
+
+	//1143. Longest Common Subsequence
+	int longestCommonSubsequence(string text1, string text2);
 
 	/*
 	 * k数之和
