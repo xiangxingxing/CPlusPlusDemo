@@ -8,6 +8,7 @@
 #include <stack>
 #include <queue>
 #include <unordered_map>
+#include <unordered_set>
 #include <string>
 
 using namespace std;
@@ -31,7 +32,11 @@ vector<int> MS::twoSum(vector<int>& nums, int target){
 	return result;
 }
 
-//3. Longest Substring Without Repeating Characters
+/*
+ * 3. Longest Substring Without Repeating Characters
+ * Time: O(n)
+ * Space: O(n)
+ * */
 int MS::lengthOfLongestSubstring(string s){
 	int n = s.size();
 	int longest = 0;
@@ -69,6 +74,52 @@ int MS::reverseInteger(int x){
 	return res;
 }
 
+/*
+ * 15.3Sum
+ * 思路：遍历并固定第i个数，双指针寻找另外两个数 使得三数之和为0， 注意去重
+ * Time:O(n^2),其中 n 为数组的长度。排序 O(n log n)，双指针遍历过程 O(n^2)
+ * Space: O(k + log n)，结果三元组的数量 + 排序所需的栈空间
+ * */
+vector<vector<int>> MS::threeSum(vector<int>& nums){
+	if(nums.empty()) return {};
+	std::sort(nums.begin(), nums.end());
+	vector<vector<int>> result;
+	int n = nums.size();
+	for (int i = 0; i < n; ++i)
+	{
+		if(i > 0 && nums[i] == nums[i - 1]){
+			continue;
+		}
+
+		int left = i + 1;
+		int right = n - 1;
+		while(left < right){
+			int sum = nums[i] + nums[left] + nums[right];
+			if(sum == 0){
+				result.push_back({nums[i], nums[left], nums[right]});
+				left++;
+				right--;
+
+				while(left < right && nums[left] == nums[left - 1]){
+					left++;
+				}
+				while(left < right && nums[right] == nums[right + 1])
+				{
+					right--;
+				}
+			}
+			else if(sum > 0){
+				right--;
+			}
+			else{
+				left++;
+			}
+		}
+	}
+
+	return result;
+}
+
 //31.Next permutation
 void MS::nextPermutation(vector<int>& nums){
 	int n = nums.size();
@@ -85,6 +136,41 @@ void MS::nextPermutation(vector<int>& nums){
 	}
 
 	std::reverse(nums.begin() + i + 1, nums.end());
+}
+
+/*
+ * 39. Combination Sum
+ * 给定一个无重复元素的数组 candidates 和一个目标数 target，找出 candidates 中所有可以使数字和为 target 的组合。
+ * 同一个数字在组合中可以使用多次
+ * Time: 取决于回溯深度以及分支情况，最坏情况接近 O(n^(target/min_num))，实际常用场景下不严格这样测
+ * Space: O(target)（回溯深度）或 O(n)（取决于输入规模），主要是递归深度和暂存路径
+ *
+ * */
+vector<vector<int>> MS::combinationSum(vector<int>& candidates, int target){
+	vector<vector<int>> result;
+	if(candidates.empty() || target == 0) return result;
+	std::sort(candidates.begin(), candidates.end());
+	vector<int> subset;
+	combinationSumHelper(candidates, target, 0, subset, result);
+	return result;
+}
+
+void MS::combinationSumHelper(vector<int>& candidates, int remained, int start, vector<int>& subset, vector<vector<int>>& result){
+	if(remained == 0){
+		result.push_back(subset);
+		return;
+	}
+
+	for (int i = start; i < candidates.size(); ++i)
+	{
+		if(remained < candidates[i]){
+			break;
+		}
+		subset.push_back(candidates[i]);
+		// 同一元素可重复使用，故下一次调用的 start 依然是 i
+		combinationSumHelper(candidates, remained - candidates[i], i, subset, result);
+		subset.pop_back();
+	}
 }
 
 //46.Permutations
@@ -159,6 +245,57 @@ void MS::permuteUnique_dfs(vector<int>& nums, vector<bool>& visited, vector<int>
 	}
 }
 
+/*
+ * 48.Rotate Image
+ * 给定一个 n x n 的二维矩阵 matrix，表示一幅图像，请将图像原地旋转 90 度（顺时针）
+ * 1 2 3	  7 4 1
+ * 4 5 6  ->  8 5 2
+ * 7 8 9	  9 6 3
+ * 思路：先交换 swap(matrix[i][j], matrix[j][i]), 再对每一行reverse
+ * Time: O(n^2),访问矩阵的每个元素
+ * Space: O(1)
+ *
+ * */
+void MS::rotate(vector<vector<int>>& matrix){
+	int m = matrix.size();
+	int n = matrix[0].size();
+	for (int i = 0; i < m; ++i)
+	{
+		for (int j = 0; j < i; ++j)
+		{
+			swap(matrix[i][j], matrix[j][i]);
+		}
+	}
+
+	for(int i = 0; i < m; i++){
+		std::reverse(matrix[i].begin(), matrix[i].end());
+	}
+}
+
+/*
+ * 49. Group Anagrams 由相同字符但排列顺序不同的字符串
+ * 思路：对每个字符串排序，作为哈希表的键值key，value为vector<string>存储相同key的字符串
+ * Time: O(n * k log k)，其中 n 为字符串数目，k 为字符串平均长度。对每个字符串排序需要 O(k log k)，总共 n 个字符串
+ * Space: O(nk)，哈希表中存储所有字符串副本
+ *
+ * C++ 中，unordered_map 的行为是这样的：当通过键访问一个不存在的元素时，会隐式地初始化一个默认值
+ * */
+vector<vector<string>> MS::groupAnagrams(vector<string>& strs){
+	unordered_map<string, vector<string>> strMap;
+	for(auto& str : strs){
+		string sortedStr = str;
+		std::sort(sortedStr.begin(), sortedStr.end());
+		strMap[sortedStr].push_back(str);//隐式初始化
+	}
+	vector<vector<string>> result;
+	result.reserve(strMap.size());
+	for (const auto& item: strMap){
+		result.push_back(item.second);
+	}
+
+	return result;
+}
+
 //56.Merge Intervals 合并区间
 /*
  * Time：O(nlogn)
@@ -211,6 +348,134 @@ int MS::climbStairs(int n){
 	}
 
 	return prev1;
+}
+
+/*
+ * 78. Subsets
+ * 给定一个不含重复元素的整数数组 nums，返回其所有可能的子集（幂集）
+ * Time:O(n × 2^n)
+ * 		每个子集的构造时间为 O(n)
+ * 		每次迭代将现有的子集扩展，生成2^n个子集
+ * Space:O(n)
+ * */
+vector<vector<int>> MS::subsets(vector<int>& nums) {
+	if(nums.empty()) return {};
+	//std::sort(nums.begin(), nums.end());
+	vector<vector<int>> result;
+	vector<int> temp;
+	subsetsDFS(nums, 0, temp, result);
+	return result;
+}
+
+void MS::subsetsDFS(vector<int>& nums, int index, vector<int>& temp, vector<vector<int>>& result){
+	result.push_back(temp);
+
+	for(int i = index; i < nums.size(); i++){
+		temp.push_back(nums[i]);
+		subsetsDFS(nums, i + 1, temp, result);
+		temp.pop_back();
+	}
+}
+
+/*
+ * 90.Subsets 2
+ * Time:O(n × 2^n)
+ * Space:O(n × 2^n)
+ *
+ * */
+vector<vector<int>> MS::subsetsWithDup(vector<int>& nums){
+	if(nums.empty()) return {};
+	std::sort(nums.begin(), nums.end());
+	vector<vector<int>> result;
+	vector<int> temp;
+	subsetsWithDup(nums, 0, temp, result);
+	return result;
+}
+
+void MS::subsetsWithDup(vector<int>& nums, int index, vector<int>& temp, vector<vector<int>>& result){
+	result.push_back(temp);
+
+	for(int i = index; i < nums.size(); i++){
+		if(i > index && nums[i] == nums[i - 1]){
+			continue;
+		}
+		temp.push_back(nums[i]);
+		subsetsWithDup(nums, i + 1, temp, result);
+		temp.pop_back();
+	}
+}
+
+/*
+ * 215.Kth Largest Element in an Array
+ * Time:平均 O(n)，最坏 O(n^2)
+ * Space:O(log n)，递归栈空间（平均情况）
+ * 快速选择：更高效，尤其适合静态数组
+ * */
+int MS::findKthLargest(vector<int>& nums, int k){
+	return quickSortHelper(nums, 0, nums.size() - 1, nums.size() - k);
+}
+
+/*
+ * 215.Kth Largest Element in an Array
+ * Time:总时间复杂度为 O(n log k),插入堆和删除堆顶的时间复杂度为 O(log k)，遍历数组需要 O(n)
+ * Space:堆的大小为 k，空间复杂度为 O(k)
+ *	优先队列：更适合用于流式数据，保持动态更新
+ * */
+int MS::findKthLargestMinHeap(vector<int>& nums, int k){
+	priority_queue<int, vector<int>, greater<int>> minHeap;
+	for(int n : nums){
+		minHeap.push(n);
+		if(minHeap.size() > k){
+			minHeap.pop();
+		}
+	}
+
+	return minHeap.top();
+}
+
+int MS::quickSortHelper(vector<int>& nums, int start, int end, int index){
+	int pivot = internal_quick_sort(nums, start, end);
+	if(pivot == index){
+		return nums[pivot];
+	}
+	else if(pivot > index){
+		return quickSortHelper(nums, start, pivot - 1, index);
+	}
+	else{
+		return quickSortHelper(nums, pivot + 1, end, index);
+	}
+}
+
+/*
+ * 238. Product of Array Except Self
+ * 给定一个整数数组 nums，返回一个数组 answer，其中 answer[i] 等于 nums 除下标 i 之外的所有元素的乘积。
+ * 要求在 O(n) 时间复杂度和不使用除法的情况下完成。
+ * 思路：分别设置left数组、right数组
+ * 		left[i]表示nums[0, i - 1]所有数乘积
+ * 		right[i]表示nums[i + 1, n - 1]所有数乘积
+ * 		最终结果 answers[i] = left[i] * right[i]
+ * Time: O(n) 遍历两次
+ * Space: O(1)
+ *
+ * */
+vector<int> MS::productExceptSelf(vector<int>& nums){
+	int n = nums.size();
+	vector<int> answers(n, 1);
+
+	// answer[i] 存储的是 nums[0..i-1] 的乘积
+	for (int i = 1; i < n; ++i)
+	{
+		answers[i] = answers[i - 1] * nums[i - 1];
+	}
+
+	// 通过一个变量记录右侧乘积
+	int rightProduct = 1;
+	for(int i = n - 1; i >= 0; i--){
+		answers[i] = answers[i] * rightProduct;
+		rightProduct *= nums[i];
+	}
+
+	return answers;
 }
 
 //746. Min Cost Climbing Stairs
@@ -532,6 +797,39 @@ void MS::inorder(TreeNode* node){
 }
 
 /*
+ * 103.Binary Tree Zigzag Level Order Traversal
+ * 在二叉树的层序遍历基础上，要求交替方向（从左到右，再从右到左）打印每层节点
+ * Time:
+ * Space:
+ * */
+vector<vector<int>> MS::zigzagLevelOrder(TreeNode* root){
+	if(!root) return {};
+	queue<TreeNode*> q;
+	q.push(root);
+	vector<vector<int>> result;
+	bool left_to_right = true;
+	while(!q.empty()){
+		int size = q.size();
+		vector<int> cur_level(size);
+		for (int i = 0; i < size; ++i)
+		{
+			TreeNode* node = q.front();
+			int index = left_to_right ? i : size - i - 1;
+			cur_level[index] = node->val;
+			if(node->left) q.push(node->left);
+			if(node->right) q.push(node->right);
+			q.pop();
+		}
+
+		left_to_right = !left_to_right;
+		result.push_back(cur_level);
+	}
+
+	return result;
+}
+
+
+/*
  * 105.Construct Binary Tree from Preorder and Inorder Traversal
  * Time:O(n)
  * Space:
@@ -669,6 +967,7 @@ void MS::pathSumDFS(TreeNode* root, int targetSum, vector<int>& path, vector<vec
 
 /*
  * 114. Flatten Binary Tree to Linked List
+ * 一棵二叉树，将它展开为一个类似单链表的结构。要求展开后单链表仍然使用 right 指针作为下一个节点指向，left 指针置为 nullptr
  * Time:O(n)
  * Space:最坏O(h), h为树的高度
  * */
@@ -687,6 +986,28 @@ void MS::flatten(TreeNode* root){
 		cur = cur->right;
 	}
 	cur->right = temp;
+}
+
+//144. Binary Tree Preorder Traversal
+vector<int> MS::preorderTraversal(TreeNode* root){
+	if(root == nullptr) return {};
+	vector<int> result;
+	stack<TreeNode*> sk;
+	TreeNode* p = root;
+	while(p || !sk.empty()){
+		if(p != nullptr){
+			sk.push(p);
+			result.push_back(p->val);
+			p = p->left;
+		}
+		else{
+			p = sk.top();
+			sk.pop();
+			p = p->right;
+		}
+	}
+
+	return result;
 }
 
 //145. Binary Tree Postorder Traversal
@@ -731,7 +1052,11 @@ TreeNode* MS::lowestCommonAncestorBST(TreeNode* root, TreeNode* p, TreeNode* q){
 	return root;
 }
 
-//236. Lowest Common Ancestor of a Binary Tree
+/*
+ * 236. Lowest Common Ancestor of a Binary Tree
+ * Time:   O(n)，n 为节点数，DFS 需遍历整棵树一次
+ * Space:  O(n)，最坏情况下（树退化成链表）递归深度可达n
+ * */
 TreeNode* MS::lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q){
 	if(!root || root == p || root == q) return root;
 	TreeNode* left = lowestCommonAncestor(root->left, p, q);
@@ -1007,10 +1332,14 @@ void MS::rotate(vector<int>& nums, int k){
 	std::reverse(nums.begin() + k, nums.end());
 }
 
-//82. Remove Duplicates from Sorted List II
+/*
+ * 82. Remove Duplicates from Sorted List II
+ * Time:O(n)
+ * Space:O(1)
+ * */
 ListNode* MS::deleteDuplicates2(ListNode* head) {
-	ListNode* dummy = new ListNode(0, head);
-	ListNode* p = dummy;
+	ListNode dummy;
+	ListNode* p = &dummy;
 	while(p->next && p->next->next){
 		if(p->next->val == p->next->next->val){
 			int dupVal = p->next->val;
@@ -1022,12 +1351,15 @@ ListNode* MS::deleteDuplicates2(ListNode* head) {
 			p = p->next;
 		}
 	}
-	ListNode* newHead = dummy->next;
-	delete dummy;
-	return newHead;
+
+	return dummy.next;
 }
 
-//83. Remove Duplicates from Sorted List
+/*
+ * 83. Remove Duplicates from Sorted List
+ * Time:O(n)
+ * Space:O(1)
+ * */
 ListNode* MS::deleteDuplicates(ListNode* head) {
 	ListNode* dummy = new ListNode(0, head);
 	ListNode* p = dummy;
@@ -1042,6 +1374,51 @@ ListNode* MS::deleteDuplicates(ListNode* head) {
 	ListNode* newHead = dummy->next;
 	delete dummy;
 	return newHead;
+}
+
+/*
+ * 92. Reverse Linked List II
+ * Time
+  	查找起点和终点的循环各为 O(n)。
+	反转子链表部分的复杂度为 O(right - left + 1)。
+	总时间复杂度为 O(n)
+ * Space:O(1)
+ * */
+ListNode* MS::reverseBetween(ListNode* head, int left, int right){
+	if (!head || left == right) return head;
+
+	ListNode dummy;
+	dummy.next = head;
+	ListNode* slow = &dummy;
+
+	for(int i = 1; i < left; i++){
+		slow = slow->next;
+	}
+
+	ListNode* fast = slow;
+	for(int i = 0; i <= right - left + 1; i++){
+		fast = fast->next;
+	}
+
+	ListNode* tail = slow->next;
+	slow->next = reverseHelper(tail, fast);
+	tail->next = fast;
+
+	ListNode* res = dummy.next;
+	return res;
+}
+
+ListNode* MS::reverseHelper(ListNode* head, ListNode* target){
+	ListNode* cur = head;
+	ListNode* pre = nullptr;
+	while(cur != target){
+		ListNode* next = cur->next;
+		cur->next = pre;
+		pre = cur;
+		cur = next;
+	}
+
+	return pre;
 }
 
 //141. Linked List Cycle
@@ -1184,7 +1561,12 @@ ListNode* MS::reverseList(ListNode* head){
  *      2.求最大/最小值
  *      3.求存在性
  * */
-//5.Longest Palindromic Substring
+/*
+ * 5.Longest Palindromic Substring
+ *
+ * Time:O(n^2)
+ * Space: O(1)
+ * */
 string MS::longestPalindrome(const std::string &s){
 	if (s.empty()) return "";
 
@@ -1224,33 +1606,23 @@ int MS::findLongestPalindrome(const std::string &s, int i, int j){
 
 //22. Generate Parentheses
 vector<string> MS::generateParenthesis(int n){
-	int open = n;
-	int close = n;
-	string current;
 	vector<string> result;
-	back_tracking(open, close, current, result);
+	back_tracking("", n, n, result);
 	return result;
 }
 
-void MS::back_tracking(int open, int close, string& current, vector<string>& result){
-	// 如果没有剩余的括号可用，则将当前字符串加入结果中
-	if(open == 0 && close == 0){
-		result.push_back(current);
+void MS::back_tracking(string cur, int left, int right, vector<string>& result){
+	if(left == 0 && right == 0){
+		result.push_back(cur);
 		return;
 	}
-
-	// 如果还有左括号可用，继续添加左括号
-	if(open > 0){
-		current.push_back('(');
-		back_tracking(open - 1, close, current, result);
-		current.pop_back();
+	//如果还有左括号可以用
+	if(left > 0){
+		back_tracking(cur + '(', left - 1, right, result);
 	}
-
-	// 如果右括号的数量大于左括号，可以添加右括号
-	if(open < close){
-		current.push_back(')');
-		back_tracking(open, close - 1, current, result);
-		current.pop_back();
+	//只有当右括号数量大于左括号数量时，才能使用右括号
+	if(left < right){
+		back_tracking(cur + ')', left, right - 1, result);
 	}
 }
 
@@ -1402,6 +1774,32 @@ int MS::robCircle(vector<int>& nums){
 	return std::max(maxWithFirst, maxWithoutFirst);
 }
 
+/*
+ * 300. Longest Increasing Subsequence
+ * 给定一个整数序列，找到其中最长严格递增子序列（LIS）的长度
+ * 思路: 定义 dp[i]表示前i个数中的最长LIS
+ * 		转移方程 dp[i] = max(dp[i], dp[j] + 1) 如果nums[j] < nums[i]
+ * 		结果：
+ * Time:
+ * Space:
+ * */
+int MS::lengthOfLIS(vector<int>& nums){
+	if (nums.empty()) return 0;
+	int n = nums.size();
+	vector<int> dp(n, 1);
+	for (int i = 1; i < n; ++i)
+	{
+		for (int j = 0; j < i; ++j)
+		{
+			if(nums[j] < nums[i]){
+				dp[i] = std::max(dp[i], dp[j] + 1);
+			}
+		}
+	}
+
+	return *max_element(dp.begin(), dp.end());
+}
+
 //377. Combination Sum IV
 int MS::combinationSum4(vector<int>& nums, int target){
 	//dp[target]表示和为target的所有组合数
@@ -1419,6 +1817,57 @@ int MS::combinationSum4(vector<int>& nums, int target){
 	return dp[target];
 }
 
+/*
+ * 79. Word Search
+ * 给定一个 m x n 的字符网格和一个单词 word，判断该单词是否可以通过上下左右相邻的连续字符匹配到。相同单元格内的字母不允许被重复使用。
+ * 思路：
+ * 		1.回溯
+ * 		2.暂时将访问过的board[i][j] = "#"
+ * Time:
+ * Space:
+ * */
+bool MS::exist(vector<vector<char>>& board, string word){
+	if(word.empty()) return false;
+	vector<int> directions = {0, 1, 0, -1, 0};
+	int m = board.size();
+	int n = board[0].size();
+	for (int i = 0; i < m; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			if(existDFS(board, word, 0, i, j, directions)){
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool MS::existDFS(vector<vector<char>>& board, string& word, int index, int i, int j, vector<int>& directions){
+	int m = board.size();
+	int n = board[0].size();
+	// 匹配完成
+	//if(index == word.size()) return true;
+	if(i < 0 || j < 0 || i >= m || j >= n || board[i][j] != word[index]){
+		return false;
+	}
+	if(index == word.size() - 1) return true;
+	// 标记已访问（可改成特殊字符）
+	char temp = board[i][j];
+	board[i][j] = '#';
+	bool found = false;
+	for (int k = 0; k < 4; ++k)
+	{
+		int x = i + directions[k];
+		int y = j + directions[k + 1];
+		found |= existDFS(board, word, index + 1, x, y, directions);
+	}
+
+	board[i][j] = temp;
+
+	return found;
+}
 
 //200. Number of Islands
 int MS::numIslands(vector<vector<char>>& grid){
@@ -1587,34 +2036,12 @@ int MS::maxAreaOfIslandBFS(vector<vector<int>>& grid, int i, int j, const vector
 	return area;
 }
 
-//1143. Longest Common Subsequence
 /*
- * Time: O(m * n)
- * Space: O(m * n)
+ * Partition Equal Subset Sum
+ *
  * */
-int MS::longestCommonSubsequence(string text1, string text2){
-	//dp[i][j]表示text1[0...i]中包含text2[0...j]最长公共子序列
-	//转移方程：
-	// 		如果 text1[i-1] == text2[j-1]，则 dp[i][j] = dp[i-1][j-1] + 1
-	//		否则，dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-	int n = text1.size();
-	int m = text2.size();
-	vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
-	//dp[i][0]和dp[0][j]均等于0
-	for (int i = 1; i <= n; ++i)
-	{
-		for (int j = 1; j <= m; ++j)
-		{
-			if(text1[i - 1] == text2[j - 1]){
-				dp[i][j] = dp[i - 1][j - 1] + 1;
-			}
-			else{
-				dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
-			}
-		}
-	}
+bool MS::canPartition(vector<int>& nums){
 
-	return dp[n][m];
 }
 
 
@@ -1767,7 +2194,44 @@ int MS::minPathSum(vector<vector<int>>& grid){
 	return dp[m - 1][n - 1];
 }
 
-//115. Distinct Subsequences
+/*
+ * 91. Decode Ways
+ * 给定一串只包含数字的非空字符串，统计其可能被解码成字母的总数。'A' = 1, 'B' = 2, ... 'Z' = 26。
+ * 思路：
+ * 		状态：dp[i]表示s[0, i - 1]的解码方法数
+ * 		转移方程：dp[i] += dp[i - 1] 当s[i - 1] == '1' ~ '9'
+ * 				dp[i] += dp[i - 2] 当s.substring(i - 2, 2) <= 26
+ * 		初始化：dp[0] = 1;方便计算  dp[1] = 1;当s[0]不等于 '0'时就有1种
+ * Time: O(n)
+ * Space: O(n)
+ * */
+int MS::numDecodings(string s){
+	if(s.empty() || s[0] == '0') return 0;
+	int n = s.size();
+	vector<int> dp(n + 1, 0);
+	dp[0] = 1;
+	dp[1] = 1;
+	for(int i = 2; i <= n; i++){
+		//单独解码
+		if(s[i - 1] != '0'){
+			dp[i] += dp[i - 1];
+		}
+		// 解码 s[i-2..i-1]
+		int twoDigits = stoi(s.substr(i - 2, 2));
+		if(twoDigits >= 10 && twoDigits <= 26){
+			dp[i] += dp[i - 2];
+		}
+	}
+
+	return dp[n];
+}
+
+/*
+ * 115. Distinct Subsequences 【子序列出现的次数】
+ * 给定两个字符串S 和 T，问 T 在 S 中出现为子序列的不同方式共有多少种
+ * 		这里我们关心的是个数：即有多少种取法会使得取出来的子序列恰好等于T
+ *
+ * */
 int MS::numDistinct(string s, string t){
 	if(s.empty()) return 0;
 	int m = s.size();
@@ -1795,6 +2259,68 @@ int MS::numDistinct(string s, string t){
 	}
 
 	return dp[m][n];
+}
+
+
+//1143. Longest Common Subsequence
+/*
+ * 给定两个字符串 S1和S2，求它们的最长公共子序列的长度
+ * 关注：两个串的公共子序列里能达到的最大长度是多少
+ * Time: O(m * n)
+ * Space: O(m * n)
+ * */
+int MS::longestCommonSubsequence(string text1, string text2){
+	//dp[i][j]表示text1[0...i]中包含text2[0...j]最长公共子序列
+	//转移方程：
+	// 		如果 text1[i-1] == text2[j-1]，则 dp[i][j] = dp[i-1][j-1] + 1
+	//		否则，dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+	int n = text1.size();
+	int m = text2.size();
+	vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+	//dp[i][0]和dp[0][j]均等于0
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			if(text1[i - 1] == text2[j - 1]){
+				dp[i][j] = dp[i - 1][j - 1] + 1;
+			}
+			else{
+				dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
+			}
+		}
+	}
+
+	return dp[n][m];
+}
+
+
+/*
+ * 139.Word Break
+ * 给定一个字符串 s 和一个包含若干单词的集合 wordDict，判断 s 是否可以被拆分成字典中存在的单词组合
+ * 		状态：dp[i]表示s[0, i - 1]是否可以被拆分
+ * 		转移方程: dp[i] = dp[j] ,当 s[j, i - 1]在wordDict中存在时
+ * 		边界条件: dp[0] = true;
+ * Time:O(n^2)
+ * Space:O(n)
+ * */
+bool MS::wordBreak(string s, vector<string>& wordDict){
+	if(s.empty() || wordDict.empty()) return false;
+	unordered_set<string> set(wordDict.begin(), wordDict.end());
+	int n = s.size();
+	vector<bool> dp(n + 1, false);//dp[i]表示s[0, i - 1]是否可以被拆分
+	dp[0] = true;
+	for(int i = 1; i <= n; i++){
+		for (int j = 0; j < i; ++j)
+		{
+			if(dp[j] && set.find(s.substr(j, i - j)) != set.end()){
+				dp[i] = dp[j];
+				break;
+			}
+		}
+	}
+
+	return dp[n];
 }
 
 /**

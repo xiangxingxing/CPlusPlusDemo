@@ -38,8 +38,15 @@ public:
 	//7. Reverse Integer
 	int reverseInteger(int x);
 
+	//15.3Sum
+	vector<vector<int>> threeSum(vector<int>& nums);
+
 	//31.Next permutation
 	void nextPermutation(vector<int>& nums);
+
+	//39. Combination Sum
+	vector<vector<int>> combinationSum(vector<int>& candidates, int target);
+	void combinationSumHelper(vector<int>& candidates, int remained, int start, vector<int>& subset, vector<vector<int>>& result);
 
 	//46.Permutations
 	vector<vector<int>> permute(vector<int>& nums);
@@ -49,11 +56,33 @@ public:
 	vector<vector<int>> permuteUnique(vector<int>& nums);
 	void permuteUnique_dfs(vector<int>& nums, vector<bool>& visited, vector<int>& temp, vector<vector<int>>& result);
 
+	//48.Rotate Image
+	void rotate(vector<vector<int>>& matrix);
+
+	//49. Group Anagrams
+	vector<vector<string>> groupAnagrams(vector<string>& strs);
+
 	//56.Merge Intervals 合并区间
 	vector<vector<int>> mergeIntervals(vector<vector<int>>& intervals);
 
 	//70.Climbing Stairs
 	int climbStairs(int n);
+
+	//78. Subsets
+	vector<vector<int>> subsets(vector<int>& nums);
+	void subsetsDFS(vector<int>& nums, int index, vector<int>& temp, vector<vector<int>>& result);
+
+	//90.Subsets 2
+	vector<vector<int>> subsetsWithDup(vector<int>& nums);
+	void subsetsWithDup(vector<int>& nums, int index, vector<int>& temp, vector<vector<int>>& result);
+
+	//215.Kth Largest Element in an Array
+	int findKthLargest(vector<int>& nums, int k);
+	int findKthLargestMinHeap(vector<int>& nums, int k);
+	int quickSortHelper(vector<int>& nums, int start, int end, int index);
+
+	//238. Product of Array Except Self
+	vector<int> productExceptSelf(vector<int>& nums);
 
 	//746. Min Cost Climbing Stairs
 	int minCostClimbingStairs(vector<int>& cost);
@@ -104,6 +133,9 @@ public:
 	void recoverTree(TreeNode* root);
 	void inorder(TreeNode* node);
 
+	//103.Binary Tree Zigzag Level Order Traversal
+	vector<vector<int>> zigzagLevelOrder(TreeNode* root);
+
 	//105.Construct Binary Tree from Preorder and Inorder Traversal
 	TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder);
 	TreeNode* buildTreeHelper(vector<int>& preorder, vector<int>& inorder,
@@ -129,6 +161,9 @@ public:
 
 	//114. Flatten Binary Tree to Linked List
 	void flatten(TreeNode* root);
+
+	//144. Binary Tree Preorder Traversal
+	vector<int> preorderTraversal(TreeNode* root);
 
 	//145. Binary Tree Postorder Traversal
 	vector<int> postorderTraversal(TreeNode* root);
@@ -187,6 +222,10 @@ public:
 	//83. Remove Duplicates from Sorted List
 	ListNode* deleteDuplicates(ListNode* head);
 
+	//92. Reverse Linked List II
+	ListNode* reverseBetween(ListNode* head, int left, int right);
+	ListNode* reverseHelper(ListNode* head, ListNode* target);
+
 	//141. Linked List Cycle
 	bool hasCycle(ListNode *head);
 
@@ -227,7 +266,7 @@ public:
 
 	//22. Generate Parentheses
 	vector<string> generateParenthesis(int n);
-	void back_tracking(int open, int close, string& current, vector<string>& result);
+	void back_tracking(string cur, int left, int right, vector<string>& result);
 
 	//55. JumpGame
 	bool canJump(vector<int>& nums);
@@ -253,8 +292,14 @@ public:
 	//64. Minimum Path Sum
 	int minPathSum(vector<vector<int>>& grid);
 
+	//91. Decode Ways II
+	int numDecodings(string s);
+
 	//115. Distinct Subsequences
 	int numDistinct(string s, string t);
+
+	//139.Word Break
+	bool wordBreak(string s, vector<string>& wordDict);
 
 	//198.House Robber
 	int rob(vector<int>& nums);
@@ -262,8 +307,15 @@ public:
 	//213. House Robber II
 	int robCircle(vector<int>& nums);
 
+	//300. Longest Increasing Subsequence
+	int lengthOfLIS(vector<int>& nums);
+
 	//377. Combination Sum IV
 	int combinationSum4(vector<int>& nums, int target);
+
+	//79. Word Search
+	bool exist(vector<vector<char>>& board, string word);
+	bool existDFS(vector<vector<char>>& board, string& word, int index, int i, int j, vector<int>& directions);
 
 	//200. Number of Islands
 	int numIslands(vector<vector<char>>& grid);
@@ -277,6 +329,9 @@ public:
 
 	//1143. Longest Common Subsequence
 	int longestCommonSubsequence(string text1, string text2);
+
+	//Partition Equal Subset Sum
+	bool canPartition(vector<int>& nums);
 
 	/*
 	 * k数之和
