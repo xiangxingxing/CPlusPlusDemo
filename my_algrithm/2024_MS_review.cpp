@@ -34,6 +34,7 @@ vector<int> MS::twoSum(vector<int>& nums, int target){
 
 /*
  * 3. Longest Substring Without Repeating Characters
+ * 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度
  * Time: O(n)
  * Space: O(n)
  * */
@@ -76,6 +77,7 @@ int MS::reverseInteger(int x){
 
 /*
  * 15.3Sum
+ * 给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三元组 (nums[i], nums[j], nums[k])，使得这三个数的和为 0。要求找出所有不重复的三元组
  * 思路：遍历并固定第i个数，双指针寻找另外两个数 使得三数之和为0， 注意去重
  * Time:O(n^2),其中 n 为数组的长度。排序 O(n log n)，双指针遍历过程 O(n^2)
  * Space: O(k + log n)，结果三元组的数量 + 排序所需的栈空间
@@ -120,7 +122,47 @@ vector<vector<int>> MS::threeSum(vector<int>& nums){
 	return result;
 }
 
-//31.Next permutation
+/*
+ * 16.3Sum Closest
+ * 给定一个包含 n 个整数的数组 nums 和一个目标值 target，从 nums 中找出三个数使它们的和与 target 最接近。返回这个最接近的和
+ *
+ * */
+int MS::threeSumClosest(vector<int>& nums, int target){
+	sort(nums.begin(), nums.end());
+	int n = nums.size();
+	int closestSum = nums[0] + nums[1] + nums[2]; // 初始值
+
+	for (int i = 0; i < n - 2; i++) {
+		int left = i + 1, right = n - 1;
+		while (left < right) {
+			int sum = nums[i] + nums[left] + nums[right];
+			// 如果更接近
+			if (abs(sum - target) < abs(closestSum - target)) {
+				closestSum = sum;
+			}
+			if (sum == target) {
+				return target; // 精确匹配
+			} else if (sum < target) {
+				left++;
+			} else {
+				right--;
+			}
+		}
+	}
+
+	return closestSum;
+}
+
+/*
+ * 31.Next permutation
+ * 对给定的整数序列，找到下一个排列，即比当前序列稍大的那个排列。若不存在下一个更大的排列，则将其重排为最小的排列（升序）。
+ * 思路
+ * 		1.从右往左找到第一对相邻递增元素，标记索引i
+ * 		2.若i >= 0,再从右往左找到第一个比nums[i]大的元素，标记为j，并交换
+ * 		3.最后将 i+1 到末尾区间反转，使之变成最小序列
+ * Time:O(n)，从右向左扫描并反转末尾部分
+ * Space:O(1)
+ * */
 void MS::nextPermutation(vector<int>& nums){
 	int n = nums.size();
 	int i = n - 2;
@@ -257,17 +299,15 @@ void MS::permuteUnique_dfs(vector<int>& nums, vector<bool>& visited, vector<int>
  *
  * */
 void MS::rotate(vector<vector<int>>& matrix){
-	int m = matrix.size();
-	int n = matrix[0].size();
-	for (int i = 0; i < m; ++i)
-	{
-		for (int j = 0; j < i; ++j)
-		{
-			swap(matrix[i][j], matrix[j][i]);
+	if(matrix.empty()) return;
+	int n = matrix.size();
+	for(int i = 1; i < n; i++){
+		for(int j = 0; j < i; j++){
+			std::swap(matrix[i][j], matrix[j][i]);
 		}
 	}
 
-	for(int i = 0; i < m; i++){
+	for(int i = 0; i < n; i++){
 		std::reverse(matrix[i].begin(), matrix[i].end());
 	}
 }
@@ -296,8 +336,42 @@ vector<vector<string>> MS::groupAnagrams(vector<string>& strs){
 	return result;
 }
 
-//56.Merge Intervals 合并区间
 /*
+ * 50. Pow(x, n)
+ * 实现 pow(x, n)，即计算 x 的 n 次幂函数（n 可以为负数）
+ * 思路：分治
+ * 		若 n 为偶数，则 x^n = (x^(n/2))^2
+ * 		若 n 为奇数，则 x^n = x * (x^(n-1))
+ * 		考虑 n < 0 的情况，要返回 1 / (x^(-n))
+ * Time:O(log n),每次n减半
+ * Space:O(log n),递归栈
+ * */
+double MS::myPow(double x, int n){
+	long long N = n;//防止 n = -2147483648 时取绝对值溢出
+	if(N < 0){
+		x = 1 / x;
+		N = std::abs(N);
+	}
+
+	return myPowHelper(x, N);
+}
+
+double MS::myPowHelper(double x, int n){
+	if(n == 0){
+		return 1.0;
+	}
+	double half = myPowHelper(x, n / 2);
+	if(n % 2 == 0){
+		return half * half;
+	}
+	else{
+		return half * half * x;
+	}
+}
+
+/*
+ * 56.Merge Intervals 合并区间
+ * 给定一组区间 [start, end]，要求合并所有重叠区间，并返回结果。结果中的区间按起始位置排序。
  * Time：O(nlogn)
  * Space：O(n)
  * */
@@ -348,6 +422,55 @@ int MS::climbStairs(int n){
 	}
 
 	return prev1;
+}
+
+
+/*
+ * 73. Set Matrix Zeroes
+ * 给定一个 m x n 的矩阵，如果该矩阵中有某个元素为 0，则将其所在的行和列都设置为 0。要求在原地修改矩阵
+ * Time:O(m * n)
+ * Space:O(1)
+ * */
+void MS::setZeroes(vector<vector<int>>& matrix){
+	int m = matrix.size();
+	if(m == 0) return;
+	int n = matrix[0].size();
+	if(n == 0) return;
+	bool firstRowZero = std::any_of(matrix[0].begin(), matrix[0].end(), [](int a){ return a == 0;});
+	bool firstColZero = std::any_of(matrix.begin(), matrix.end(), [](vector<int>& v){ return v[0] == 0;});
+	for (int i = 0; i < m; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			if(matrix[i][j] == 0){
+				matrix[i][0] = 0;
+				matrix[0][j] = 0;
+			}
+		}
+	}
+
+	for (int i = 1; i < m; i++)
+	{
+		for (int j = 1; j < n; ++j)
+		{
+			if(matrix[i][0] == 0 || matrix[0][j] == 0){
+				matrix[i][j] = 0;
+			}
+		}
+	}
+
+	if(firstRowZero){
+		for (int j = 0; j < n; j++) {
+			matrix[0][j] = 0;
+		}
+	}
+
+	if(firstColZero){
+		for (int i = 0; i < m; ++i)
+		{
+			matrix[i][0] = 0;
+		}
+	}
 }
 
 /*
@@ -450,7 +573,7 @@ int MS::quickSortHelper(vector<int>& nums, int start, int end, int index){
  * 238. Product of Array Except Self
  * 给定一个整数数组 nums，返回一个数组 answer，其中 answer[i] 等于 nums 除下标 i 之外的所有元素的乘积。
  * 要求在 O(n) 时间复杂度和不使用除法的情况下完成。
- * 思路：分别设置left数组、right数组
+ * 思路：分别设置left数组、right数组 [实际只使用 answer[] 数组就够了]
  * 		left[i]表示nums[0, i - 1]所有数乘积
  * 		right[i]表示nums[i + 1, n - 1]所有数乘积
  * 		最终结果 answers[i] = left[i] * right[i]
@@ -524,7 +647,8 @@ int MS::minCostClimbingStairs(vector<int>& cost){
  * 初始化条件：dp[0] = 0,其他值初始化为正无穷
  * 返回结果: INT_MAX ? -1 : dp[amount]
  *
- * Time: O(amount * coin.size()) Space: O(amount)
+ * Time: O(amount * coin.size())
+ * Space: O(amount)
  * */
 int MS::coinChange(vector<int>& coins, int amount){
 	vector<int> dp(amount + 1, INT_MAX);
@@ -1322,8 +1446,13 @@ ListNode* MS::rotateRightHelper(ListNode* head, int k){
 	return newHead;
 }
 
-//189. Rotate Array
-// 三次反转reverse, 实现简单，性能优良，且空间复杂度为O(1)
+/*
+ * 189. Rotate Array
+ * 给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数
+ * 三次反转reverse, 实现简单，性能优良，且空间复杂度为O(1)
+ * Time: O(n) 反转操作共 3 次，每次 O(n)
+ * Space: O(1) 原地反转
+ * */
 void MS::rotate(vector<int>& nums, int k){
 	if(nums.empty()) return;
 	k %= nums.size();
@@ -1334,11 +1463,13 @@ void MS::rotate(vector<int>& nums, int k){
 
 /*
  * 82. Remove Duplicates from Sorted List II
+ * delete all nodes that have duplicate numbers
  * Time:O(n)
  * Space:O(1)
  * */
 ListNode* MS::deleteDuplicates2(ListNode* head) {
 	ListNode dummy;
+	dummy.next = head;
 	ListNode* p = &dummy;
 	while(p->next && p->next->next){
 		if(p->next->val == p->next->next->val){
@@ -1457,21 +1588,28 @@ ListNode* MS::detectCycle(ListNode *head){
 	return nullptr;
 }
 
-//143. Reorder List
+/*
+ * 143. Reorder List
+ * 给定一个单链表 L：L0 → L1 → … → Ln-1 → Ln ，请将其重新排序为：L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → …
+ * 思路
+ * 		1.快慢指针分割链表为两部分（使第1部分数量 >= No.2）
+ * 		2.反转No.2链表
+ * 		3.合并,交替拼接
+ * Time:O(n)
+ * Space:O(1)
+ * */
 void MS::reorderList(ListNode* head){
 	if(!head || !head->next) return;
 	ListNode* p = head;
 	ListNode* q = reverseList(partitionList(p));
 	while(p && q){
 		ListNode* pNext = p->next;
-		p->next = q;
 		ListNode* qNext = q->next;
 
-		p = pNext;
-		if(p){
-			q->next = p;
-		}
+		p->next = q;
+		q->next = pNext;
 
+		p = pNext;
 		q = qNext;
 	}
 }
@@ -1479,7 +1617,7 @@ void MS::reorderList(ListNode* head){
 ListNode* MS::partitionList(ListNode* head){
 	if(!head || !head->next) return head;
 	ListNode* slow = head;
-	ListNode* fast = head->next->next;
+	ListNode* fast = head;
 	while(fast && fast->next){
 		slow = slow->next;
 		fast = fast->next->next;
@@ -1604,7 +1742,64 @@ int MS::findLongestPalindrome(const std::string &s, int i, int j){
 	return len;
 }
 
-//22. Generate Parentheses
+/*
+ * 17. Letter Combinations of a Phone Number
+ * 给定一个只包含数字 2-9 的字符串，返回其能表示的所有字符组合。数字到字母的映射与电话按键相同
+ * Time:
+ * Space:
+ * */
+vector<string> MS::letterCombinations(string digits){
+	if(digits.empty()) return {};
+	//电话映射
+	vector<string> mapping = {
+		"",	   "",     "abc",
+		"def", "ghi",  "jkl",
+		"mno", "pqrs", "tuv", "wxyz"
+	};
+	vector<string> result;
+	string path;
+	letterCombinationsBackTracking(digits, mapping, 0, path, result);
+	return result;
+}
+
+void MS::letterCombinationsBackTracking(const string& digits, const vector<string>& mapping, int index, string& path, vector<string>& result){
+	if(index == (int)digits.size()){
+		result.push_back(path);
+		return;
+	}
+
+	int digit = digits[index] - '0';
+	string letters = mapping[digit];
+	for(const char& c : letters){
+		path.push_back(c);
+		letterCombinationsBackTracking(digits, mapping, index + 1, path, result);
+		path.pop_back();
+	}
+
+	/*
+	 *  每一层只处理 digits[index] 对应的字母。
+		使用 digits[index] - '0' 来获取正确的映射索引。
+		不再需要以下多余的外层for循环，递归层级清晰，逻辑正确
+	 * */
+//	for (int i = index; i < (int)digits.size(); ++i)
+//	{
+//		string letters = mapping[i];
+//		for(const char& c : letters){
+//			path.push_back(c);
+//			letterCombinationsBackTracking(digits, mapping, index + 1, path, result);
+//			path.pop_back();
+//		}
+//	}
+}
+
+/*
+ * 22. Generate Parentheses
+ * 思路
+ * 		只有当左括号数量 > 0 时，才能放置左括号；
+ * 		只有当右括号数量 > 左括号数量时（即已放的右括号比左括号少），才能放置右括号
+ * Time:卡特兰数
+ * Space:O(n)，递归最大深度为 2n
+ * */
 vector<string> MS::generateParenthesis(int n){
 	vector<string> result;
 	back_tracking("", n, n, result);
@@ -1658,6 +1853,42 @@ int MS::trap(vector<int>& height){
 	return result;
 }
 
+/*
+ * 43. Multiply Strings
+ * 给定两个非负整数的字符串形式，返回两数的乘积
+ * 要求不能使用直接转换为整型（如 stoi 或 atoi）的做法
+ *
+ * Time:O(m * n)
+ * Space:O(m + n),用于存储乘积结果的数组
+ * */
+string MS::multiply(string num1, string num2){
+	if(num1 == "0" || num2 == "0") return "0";
+	int m = num1.size();
+	int n = num2.size();
+	vector<int> res(m + n, 0);
+
+	// 从末尾往前做乘法
+	for(int i = m - 1; i >= 0; i--){
+		for(int j = n - 1; j >= 0; j--){
+			int mul = (num1[i] - '0') * (num2[j] - '0');
+			int sum = mul + res[i + j + 1];
+			res[i + j + 1] = sum % 10;
+			res[i + j] += sum / 10;
+		}
+	}
+	//去除前导0
+	string result;
+	for(auto& val : res){
+		if(result.empty() && val == 0){
+			continue;
+		}
+
+		result.push_back(val + '0');
+	}
+
+	return result;
+}
+
 //55. JumpGame O(n2)
 bool MS::canJump(vector<int>& nums){
 	int n = nums.size();
@@ -1677,6 +1908,11 @@ bool MS::canJump(vector<int>& nums){
 	return dp[n - 1];
 }
 
+/*
+ * 贪心
+ * Time: O(n)，一趟扫描
+ * Space:O(1),仅用了少量变量
+ * */
 bool MS::canJump_Greed(vector<int>& nums){
 	int farthest = 0;// 当前能到达的最远位置
 	int n = nums.size();
@@ -1759,6 +1995,18 @@ int MS::rob(vector<int>& nums){
 	}
 
 	return dp[n];
+ /*
+	int n = nums.size();
+    int prev1 = 0;
+    int prev2 = 0;
+    for(int i = 0; i < n; i++){
+        int cur = std::max(prev1, prev2 + nums[i]);
+        prev2 = prev1;
+        prev1 = cur;
+    }
+
+    return prev1;
+ */
 }
 
 
@@ -1767,11 +2015,49 @@ int MS::robCircle(vector<int>& nums){
 	if(nums.empty()) return 0;
 	int n = nums.size();
 	if(n == 1) return nums[0];
-	vector<int> withFirst(nums.begin(), nums.end() - 1);
-	int maxWithFirst = rob(withFirst);
-	vector<int> withoutFirst(nums.begin() + 1, nums.end());
-	int maxWithoutFirst = rob(withoutFirst);
-	return std::max(maxWithFirst, maxWithoutFirst);
+	int ans1 = robHelper(nums, 0, n - 1);
+	int ans2 = robHelper(nums, 1, n);
+	return std::max(ans1, ans2);
+}
+
+int MS::robHelper(vector<int>& nums, int start, int end){
+	int n = nums.size();
+	int prev1 = 0;
+	int prev2 = 0;
+	for(int i = start; i < end; i++){
+		int cur = std::max(prev1, prev2 + nums[i]);
+		prev2 = prev1;
+		prev1 = cur;
+	}
+
+	return prev1;
+}
+
+/*
+ * 279. Perfect Squares
+ * 给定正整数 n，最少需要多少个“完全平方数”(如 1,4,9,16,...) 的和才能凑出 n？
+ * 例如：n=12，最少需要 3 个数字 (4+4+4)；n=13，需要 2 个数字 (4+9)。
+ * Time: O(n * sqrt(n))，外层 n，内层枚举 ~ sqrt(n) 个平方数
+ * Space: O(n)，dp 数组大小为 n+1
+ * */
+int MS::numSquares(int n){
+	vector<int> squares;
+	for(int i = 1; i * i <= n; i++){ //从1开始，而且必须包含 i * i == n 的情况
+		//先找出所有可能的平方数
+		squares.push_back(i * i);
+	}
+
+	vector<int> dp(n + 1, INT_MAX);//dp[i]表示凑成i最少需要的平方数个数
+	dp[0] = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		for (auto& sq : squares)
+		{
+			if(sq > i) break;
+			dp[i] = std::min(dp[i], dp[i - sq] + 1);
+		}
+	}
+	return dp[n];
 }
 
 /*
@@ -2036,12 +2322,43 @@ int MS::maxAreaOfIslandBFS(vector<vector<int>>& grid, int i, int j, const vector
 	return area;
 }
 
+
 /*
- * Partition Equal Subset Sum
- *
+ * 416. Partition Equal Subset Sum
+ * 给定一个只包含正整数的数组，判断是否可以将该数组分割成两个子集，使得两个子集的和相等
+ * 思路
+ * 		1.两个子集和相等 => 总和 sum 一定是偶数，令目标子集和为 target = sum/2
+ * 		2.目标转换为“能否在数组中选出一些数，其和恰好等于 target？”
+ * Time:O(n×target)
+ * Space:O(n×target)二维数组来存储中间状态
  * */
 bool MS::canPartition(vector<int>& nums){
+	int sum = 0;
+	for(auto& n : nums){
+		sum += n;
+	}
+	if(sum % 2 == 1) return false;
+	int target = sum / 2;
+	int n = nums.size();
+	//dp[i][j]表示在前 i 个元素中，是否能凑出和 j
+	vector<vector<bool>> dp(n + 1, vector<bool>(target + 1, false));
+	for (int i = 0; i <= n; ++i)
+	{
+		dp[i][0] = true;
+	}
+	//转移方程：dp[i][j] = dp[i - num] | i >= num
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= target; ++j)
+		{
+			dp[i][j] = dp[i - 1][j];
+			if(j >= nums[i - 1]){
+				dp[i][j] = dp[i][j] || dp[i - 1][j - nums[i - 1]];
+			}
+		}
+	}
 
+	return dp[n][target];
 }
 
 
@@ -2198,7 +2515,7 @@ int MS::minPathSum(vector<vector<int>>& grid){
  * 91. Decode Ways
  * 给定一串只包含数字的非空字符串，统计其可能被解码成字母的总数。'A' = 1, 'B' = 2, ... 'Z' = 26。
  * 思路：
- * 		状态：dp[i]表示s[0, i - 1]的解码方法数
+ * 		状态：dp[i]表示s[0, i - 1] 前 i 个字符的解码方法数
  * 		转移方程：dp[i] += dp[i - 1] 当s[i - 1] == '1' ~ '9'
  * 				dp[i] += dp[i - 2] 当s.substring(i - 2, 2) <= 26
  * 		初始化：dp[0] = 1;方便计算  dp[1] = 1;当s[0]不等于 '0'时就有1种

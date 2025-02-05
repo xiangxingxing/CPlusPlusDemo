@@ -27,6 +27,18 @@ struct ListNode{
 	ListNode(int x, ListNode* next_): val(0), next(next_){}
 };
 
+//region LRU Cache
+
+/*
+ * 146.LRU Cache
+ *
+ * */
+class LRUCache{
+
+};
+
+//endregion
+
 class MS{
 public:
 	//1. Two Sum
@@ -40,6 +52,9 @@ public:
 
 	//15.3Sum
 	vector<vector<int>> threeSum(vector<int>& nums);
+
+	//16.3Sum Closest
+	int threeSumClosest(vector<int>& nums, int target);
 
 	//31.Next permutation
 	void nextPermutation(vector<int>& nums);
@@ -62,11 +77,19 @@ public:
 	//49. Group Anagrams
 	vector<vector<string>> groupAnagrams(vector<string>& strs);
 
+	//50. Pow(x, n)
+	double myPow(double x, int n);
+
+	double myPowHelper(double x, int n);
+
 	//56.Merge Intervals 合并区间
 	vector<vector<int>> mergeIntervals(vector<vector<int>>& intervals);
 
 	//70.Climbing Stairs
 	int climbStairs(int n);
+
+	//73. Set Matrix Zeroes
+	void setZeroes(vector<vector<int>>& matrix);
 
 	//78. Subsets
 	vector<vector<int>> subsets(vector<int>& nums);
@@ -264,6 +287,10 @@ public:
 	string longestPalindrome(const std::string &s);
 	int findLongestPalindrome(const std::string &s, int i, int j);
 
+	//17. Letter Combinations of a Phone Number
+	vector<string> letterCombinations(string digits);
+	void letterCombinationsBackTracking(const string& digits, const vector<string>& mapping, int index, string& temp, vector<string>& result);
+
 	//22. Generate Parentheses
 	vector<string> generateParenthesis(int n);
 	void back_tracking(string cur, int left, int right, vector<string>& result);
@@ -275,6 +302,9 @@ public:
 
 	//42. Trapping Rain Water
 	int trap(vector<int>& height);
+
+	//43. Multiply Strings
+	string multiply(string num1, string num2);
 
 	//45. JumpGame II
 	int jump(vector<int>& nums);
@@ -306,6 +336,10 @@ public:
 
 	//213. House Robber II
 	int robCircle(vector<int>& nums);
+	int robHelper(vector<int>& nums, int start, int end);
+
+	//279. Perfect Squares
+	int numSquares(int n);
 
 	//300. Longest Increasing Subsequence
 	int lengthOfLIS(vector<int>& nums);
@@ -330,7 +364,7 @@ public:
 	//1143. Longest Common Subsequence
 	int longestCommonSubsequence(string text1, string text2);
 
-	//Partition Equal Subset Sum
+	//416. Partition Equal Subset Sum
 	bool canPartition(vector<int>& nums);
 
 	/*
